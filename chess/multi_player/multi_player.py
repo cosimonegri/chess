@@ -7,7 +7,7 @@ from layouts import LoadingScreen, GameScreen, PromotionPopup, GameEndPopup
 
 from multi_player.client import ConnectionThread
 from helpers import display_fps
-from constants import FPS
+from constants import FPS, DRAWS_AFTER_MINIMIZE
 
 
 def run_multi_player(monitor_size, application_state, player_name):
@@ -20,7 +20,7 @@ def run_multi_player(monitor_size, application_state, player_name):
         "my_color": None,
         "enemy_name": None,
         "enemy_color": None,
-        "should_draw_board": True
+        "remaining_draws": 1
     }
     
     connection_state = {
@@ -42,7 +42,6 @@ def run_multi_player(monitor_size, application_state, player_name):
     game_screen = GameScreen("Chess - multiplayer", monitor_size, board, game_state)
     promotion_popup = PromotionPopup()
     game_end_popup = GameEndPopup()
-    
     loading_screen.make_current(application_state["fullscreen"])
     
     
@@ -102,7 +101,7 @@ def run_multi_player(monitor_size, application_state, player_name):
             board.check_if_loser(board.turn)
             
             game_screen.update_content()
-            game_state["should_draw_board"] = True
+            game_state["remaining_draws"] += 1
             
             connection_state["new_fen_board"] = None
         
@@ -110,14 +109,14 @@ def run_multi_player(monitor_size, application_state, player_name):
         # SHOW AND HIDE POPUPS
         if board.turn == game_state["my_color"] and board.promotion_square != None:
             if not promotion_popup.is_active():
-                promotion_popup.update(game_screen.screen, game_state["my_color"])
+                promotion_popup.update(game_screen.win_size, game_state["my_color"])
                 promotion_popup.show()
         else:
             promotion_popup.hide()
         
         if board.is_checkmate() or board.is_stalemate() and not game_end_popup.is_active():
             game_end_popup.update(
-                game_screen.screen, application_state["fullscreen"], game_state["my_color"], board.winner
+                game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
             )
             game_end_popup.show()
         
@@ -142,17 +141,21 @@ def run_multi_player(monitor_size, application_state, player_name):
                 # TOGGLE FULLSCREEN ON AND OFF
                 if event.key == pygame.K_f:
                     application_state["fullscreen"] = not application_state["fullscreen"]
-                    game_state["should_draw_board"] = True
+                    if application_state["fullscreen"]:
+                        game_state["remaining_draws"] += 1
+                    else:
+                        game_state["remaining_draws"] += DRAWS_AFTER_MINIMIZE
                     game_screen.toggle_fullscreen()
                     
                     if game_end_popup.is_active():
                         game_end_popup.update(
-                            game_screen.screen, application_state["fullscreen"], game_state["my_color"], board.winner
+                            game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
                         )
                         
                     if promotion_popup.is_active():
-                        promotion_popup.update(game_screen.screen, game_state["my_color"])
+                        promotion_popup.update(game_screen.win_size, game_state["my_color"])
                 
+                # SEE ACTIVE THREADS
                 if event.key == pygame.K_t:
                     for thread in threading.enumerate():
                         print(thread.name)
@@ -183,15 +186,16 @@ def run_multi_player(monitor_size, application_state, player_name):
                     handle_game_click_up(board, game_screen, connection_state["client"], move_sound)
                     
                     game_screen.update_content()
-                    game_state["should_draw_board"] = True
+                    game_state["remaining_draws"] += 1
         
         
         # DRAW SCREEN AND POPUPS
-        if game_state["should_draw_board"] or board.selected_piece != None:
+        if game_state["remaining_draws"] or board.selected_piece != None:
             game_screen.draw(board)
-            game_state["should_draw_board"] = False
+            if game_state["remaining_draws"] > 0:
+                game_state["remaining_draws"] -= 1
         if promotion_popup.is_active():
-            promotion_popup.draw(game_screen.screen, mouse_pos)
+            promotion_popup.draw(game_screen.screen, game_screen.win_size, mouse_pos)
         if game_end_popup.is_active():
             game_end_popup.draw(game_screen.screen, mouse_pos)
         

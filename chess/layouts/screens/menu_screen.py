@@ -19,8 +19,8 @@ class MenuScreen(Screen):
     
     
     def update_content(self):
-        self.single_player_button.update_position(self.screen)
-        self.multi_player_button.update_position(self.screen)
+        self.single_player_button.update_position(self.win_size)
+        self.multi_player_button.update_position(self.win_size)
         
         self.single_player_button.update_font_size(self.fullscreen)
         self.multi_player_button.update_font_size(self.fullscreen)
@@ -36,10 +36,10 @@ class MenuScreen(Screen):
         
         BACKGROUND_IMG.convert()
         BACKGROUND_IMG.set_alpha(200)
-        background = pygame.transform.scale(BACKGROUND_IMG, self.screen.get_size())
+        background = pygame.transform.scale(BACKGROUND_IMG, self.win_size)
         self.screen.blit(background, (0, 0))
         
-        width, height = self.screen.get_size()
+        width, height = self.win_size
         size = (LOGO_SIZE_RATIO*height) / 100
         LOGO_IMG.convert_alpha()
         logo = pygame.transform.scale(LOGO_IMG, (size, size))
@@ -75,8 +75,7 @@ class MenuButton(Button):
         self.text = text
         
         
-    def update_position(self, screen):
-        win_size = screen.get_size()
+    def update_position(self, win_size):
         self.width = (win_size[0] * self.w_ratio) / 100
         self.height = (win_size[1] * self.h_ratio) / 100
         self.left = (win_size[0] - self.width) / 2
@@ -84,6 +83,7 @@ class MenuButton(Button):
     
     
     def draw(self, screen, mouse_pos):
+        #print("draw buttons")
         if self.is_focused(mouse_pos):
             background_color = self.hover_color
         else:

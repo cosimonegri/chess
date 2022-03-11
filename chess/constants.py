@@ -12,4 +12,5 @@ SELECT_COLOR = (249,188,56)
 RED = (255,30,30)
 
 FPS = 80
-TIMER = 0.5
+TIMER = 0.5  # time between requests to the server
+DRAWS_AFTER_MINIMIZE = 3  # number of times to draw after the user exits fullscreen mode (to fix Linux black screen)

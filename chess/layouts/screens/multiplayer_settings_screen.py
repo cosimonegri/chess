@@ -24,10 +24,10 @@ class MultiplayerSettingsScreen(Screen):
     
     def update_content(self, text=""):
         self.text_input.text = text
-        self.text_input.update_position(self.screen)
+        self.text_input.update_position(self.win_size)
         self.text_input.update_font_size(self.fullscreen)
         
-        self.start_button.update_position(self.screen)
+        self.start_button.update_position(self.win_size)
         self.start_button.update_font_size(self.fullscreen)
     
     
@@ -92,8 +92,7 @@ class TextInput():
         self.text_surface = self.font.render(self.text, 1, self.text_color)
     
     
-    def update_position(self, screen):
-        win_size = screen.get_size()
+    def update_position(self, win_size):
         self.width = (win_size[0] * self.w_ratio) / 100
         self.height = (win_size[1] * self.h_ratio) / 100
         self.left = (win_size[0] - self.width) / 2
@@ -126,8 +125,7 @@ class MultiPlayerButton(Button):
         self.text = text
     
     
-    def update_position(self, screen):
-        win_size = screen.get_size()
+    def update_position(self, win_size):
         self.width = (win_size[0] * self.w_ratio) / 100
         self.height = (win_size[1] * self.h_ratio) / 100
         self.left = (win_size[0] - self.width) / 2

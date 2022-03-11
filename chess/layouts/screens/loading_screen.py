@@ -17,7 +17,7 @@ class LoadingScreen(Screen):
     
     
     def update_content(self):
-        win_width, win_height = self.get_size()
+        win_width, win_height = self.win_size
         
         if self.fullscreen:
             self.font = pygame.font.SysFont(self.font_name, self.big_font_size)

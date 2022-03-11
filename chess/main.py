@@ -1,12 +1,13 @@
 import threading
 import pygame
+import time
 
 from layouts import MenuScreen, SingleplayerSettingsScreen, MultiplayerSettingsScreen
 from single_player import run_single_player
 from multi_player import run_multi_player
 
 from helpers import display_fps
-from constants import FPS
+from constants import FPS, DRAWS_AFTER_MINIMIZE
 
 
 MAX_NAME_LENGHT = 10
@@ -25,6 +26,7 @@ def run():
     pygame.display.set_icon(ICON_IMG)
     
     monitor_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+
     menu_screen = MenuScreen("Chess - menu", monitor_size)
     singleplayer_settings_screen = SingleplayerSettingsScreen("Chess - settings", monitor_size)
     multiplayer_settings_screen = MultiplayerSettingsScreen("Chess - settings", monitor_size)
@@ -67,7 +69,10 @@ def run():
 def run_main_menu(menu_screen, application_state):
     clock = pygame.time.Clock()
     menu_screen.make_current(application_state["fullscreen"])
-    
+
+    mouse_is_moving = False
+    remaining_draws = 1
+
     while menu_screen.is_current():
         clock.tick(FPS)
         
@@ -87,6 +92,10 @@ def run_main_menu(menu_screen, application_state):
                 
                 if event.key == pygame.K_f:
                     application_state["fullscreen"] = not application_state["fullscreen"]
+                    if application_state["fullscreen"]:
+                        remaining_draws += 1
+                    else:
+                        remaining_draws += DRAWS_AFTER_MINIMIZE
                     menu_screen.toggle_fullscreen()
                 
                 if event.key == pygame.K_t:
@@ -105,8 +114,17 @@ def run_main_menu(menu_screen, application_state):
                     menu_screen.end_current()
                     application_state["in_multi_player"] = True
                     return
+            
+            if event.type == pygame.MOUSEMOTION:
+                mouse_is_moving = True
         
-        menu_screen.draw(mouse_pos)
+
+        if remaining_draws > 0 or mouse_is_moving:
+            menu_screen.draw(mouse_pos)
+            mouse_is_moving = False
+            if remaining_draws > 0:
+                remaining_draws -= 1
+        
         #display_fps(menu_screen.screen, clock)
         pygame.display.flip()
 

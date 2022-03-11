@@ -37,7 +37,7 @@ class GameScreen(Screen):
     
     
     def update_content(self):
-        win_width, win_height = self.screen.get_size()
+        win_width, win_height = self.win_size
         self.tile_size = win_height / 8
         
         if self.fullscreen:
@@ -58,7 +58,7 @@ class GameScreen(Screen):
     
     def draw_tiles(self):
         screen = self.screen
-        win_width, win_height = self.screen_size
+        win_width, win_height = self.win_size
         tile_size = self.tile_size
         screen.fill(GREY)
         
@@ -78,7 +78,7 @@ class GameScreen(Screen):
     
     def draw_pieces(self, board):
         screen = self.screen
-        win_width, win_height = self.screen_size
+        win_width, win_height = self.win_size
         tile_size = self.tile_size
         
         for row in range(8):
@@ -102,7 +102,7 @@ class GameScreen(Screen):
     
     def draw_valid_moves(self, board, selected_piece):
         screen = self.screen
-        win_width, win_height = self.screen_size
+        win_width, win_height = self.win_size
         
         tile_size = self.tile_size
         small_circle_radius = int((tile_size * SMALL_CIRCLE_RADIUS_RATIO) // 100)
@@ -132,7 +132,7 @@ class GameScreen(Screen):
     def draw_moving_piece(self, selected_piece):
         x, y = pygame.mouse.get_pos()
         screen = self.screen
-        win_width, win_height = self.screen_size
+        win_width, win_height = self.win_size
         tile_size = self.tile_size
         piece_row, piece_col = selected_piece.row, selected_piece.col
         
@@ -157,7 +157,7 @@ class GameScreen(Screen):
     
     
     def draw_players_info(self):
-        win_width, win_height = self.screen.get_size()
+        win_width, win_height = self.win_size
         top_offset = win_height / 100 * 5
         
         my_name_rect = self.my_name_surface.get_rect(
@@ -172,7 +172,7 @@ class GameScreen(Screen):
     
     
     def draw_eaten_pieces(self, eaten_pieces):
-        win_width, win_height = self.screen.get_size()
+        win_width, win_height = self.win_size
         screen = self.screen
         piece_size = self.tile_size / 10 * 7
         
@@ -202,7 +202,7 @@ class GameScreen(Screen):
     
     def get_board_row_col(self, mouse_pos):
         x, y = mouse_pos
-        win_width, win_height = self.screen_size
+        win_width, win_height = self.win_size
         tile_size = win_height / 8
         if self.game_state["my_color"] == "white":
             row = int(y // tile_size)

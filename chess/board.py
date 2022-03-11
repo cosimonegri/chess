@@ -13,7 +13,7 @@ from helpers import stringify_move
 
 
 class Board:
-    STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    STARTING_FEN = '4k3/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     
     def __init__(self, fen=STARTING_FEN):
         self.board = [[None for _ in range(8)] for _ in range(8)]  # [row][col]

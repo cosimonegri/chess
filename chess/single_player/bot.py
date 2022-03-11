@@ -1,4 +1,3 @@
-from tkinter.tix import MAX
 import chess
 from single_player.bot_data import PIECES_VALUES, POSITIONS_VALUES
          

@@ -1,4 +1,3 @@
-from textwrap import fill
 import pygame
 from constants import WIN_WIDTH, WIN_HEIGHT, WHITE
 
@@ -10,7 +9,10 @@ class Screen():
         self.min_width = min_width
         self.min_height = min_height
         self.fill_color = fill_color
+
         self.current = False
+        self.fullscreen = False
+        self.win_size = None
     
     
     def update_size(self):
@@ -18,9 +20,10 @@ class Screen():
         
         if self.fullscreen:
             self.screen = pygame.display.set_mode(self.monitor_size, pygame.FULLSCREEN)
+            self.win_size = self.monitor_size
         else:
             self.screen = pygame.display.set_mode((self.min_width, self.min_height))
-        self.screen_size = self.screen.get_size()
+            self.win_size = (self.min_width, self.min_height)
     
     
     def make_current(self, fullscreen):
@@ -43,7 +46,3 @@ class Screen():
         self.fullscreen = not self.fullscreen
         self.update_size()
         self.update_content()  # update the positions and the dimensions of the content
-    
-    
-    def get_size(self):
-        return self.screen.get_size()

@@ -26,8 +26,8 @@ class GameEndPopup(Popup):
         self.back_menu_button = GameEndButton("MENU")
     
     
-    def update(self, screen, fullscreen, player_color, winner):
-        self.update_position(screen)
+    def update(self, win_size, fullscreen, player_color, winner):
+        self.update_position(win_size)
         self.update_font(fullscreen)
         
         self.back_menu_button.update_position(self.width, self.height, self.left, self.top)
@@ -36,8 +36,8 @@ class GameEndPopup(Popup):
         self.find_message(player_color, winner)
     
     
-    def update_position(self, screen):
-        win_width, win_height = screen.get_size()
+    def update_position(self, win_size):
+        win_width, win_height = win_size
         self.width = (win_width * self.width_ratio) / 100
         self.height = (win_height * self.height_ratio) / 100
         self.left = (win_width - self.width) / 2

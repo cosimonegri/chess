@@ -46,7 +46,7 @@ class SingleplayerSettingsScreen(Screen):
     
     def update_content(self):
         for button in self.buttons:
-            button.update_position(self.screen)
+            button.update_position(self.win_size)
             button.update_font_size(self.fullscreen)
     
     
@@ -113,8 +113,7 @@ class SinglePlayerButton(Button):
         super().__init__(left_ratio, top_ratio, w_ratio, h_ratio)
     
     
-    def update_position(self, screen):
-        win_size = screen.get_size()
+    def update_position(self, win_size):
         self.left = (win_size[0] * self.left_ratio) / 100
         self.top = (win_size[1] * self.top_ratio) / 100
         self.width = (win_size[0] * self.w_ratio) / 100

@@ -22,8 +22,8 @@ class PromotionPopup(Popup):
         self.border_width = border_width
     
     
-    def update(self, screen, player_color):
-        win_width, win_height = screen.get_size()
+    def update(self, win_size, player_color):
+        win_width, win_height = win_size
         self.width = (win_width * self.width_ratio) / 100
         self.height = (win_height * self.height_ratio) / 100
         self.left = (win_width - self.width) / 2
@@ -48,8 +48,8 @@ class PromotionPopup(Popup):
             button.update_position(self.width, self.height, self.left, self.top)
     
     
-    def draw(self, screen, mouse_pos):
-        win_width, win_height = screen.get_size()
+    def draw(self, screen, win_size, mouse_pos):
+        win_width, win_height = win_size
         
         # background
         pygame.draw.rect(screen, GREY, (self.left, self.top, self.width, self.height))
