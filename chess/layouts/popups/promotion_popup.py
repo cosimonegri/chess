@@ -1,12 +1,7 @@
 import pygame
 from layouts.popup import Popup
 from layouts.button import Button
-
-from pieces.piece import WHITE_QUEEN, BLACK_QUEEN
-from pieces.piece import WHITE_ROOK, BLACK_ROOK
-from pieces.piece import WHITE_BISHOP, BLACK_BISHOP
-from pieces.piece import WHITE_KNIGHT, BLACK_KNIGHT
-from constants import GREY, BLACK, SELECT_COLOR
+from constants import GREY, BLACK, SELECT_COLOR, PIECES_PATHS, ALT_PIECES_PATHS, QUEEN_ID, ROOK_ID, BISHOP_ID, KNIGHT_ID
 
 
 class PromotionPopup(Popup):
@@ -20,6 +15,39 @@ class PromotionPopup(Popup):
     ):
         super().__init__(width_ratio, height_ratio)
         self.border_width = border_width
+
+        self.white_buttons = None
+        self.black_buttons = None
+        self.get_buttons_images()
+
+
+    def get_buttons_images(self):
+        try:
+            self.white_buttons = [
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][KNIGHT_ID]), 50, 50),
+            ]
+            self.black_buttons = [
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][KNIGHT_ID]), 50, 50),
+            ]
+        except:
+            self.white_buttons = [
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][KNIGHT_ID]), 50, 50),
+            ]
+            self.black_buttons = [
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][KNIGHT_ID]), 50, 50),
+            ]
     
     
     def update(self, win_size, player_color):
@@ -30,19 +58,9 @@ class PromotionPopup(Popup):
         self.top = (win_height - self.height) / 2
         
         if player_color == "white":
-            self.queen_button = PromotionButton(WHITE_QUEEN, 0, 0)
-            self.rook_button = PromotionButton(WHITE_ROOK, 50, 0)
-            self.bishop_button = PromotionButton(WHITE_BISHOP, 0, 50)
-            self.knight_button = PromotionButton(WHITE_KNIGHT, 50, 50)
+            self.buttons = self.white_buttons
         else:
-            self.queen_button = PromotionButton(BLACK_QUEEN, 0, 0)
-            self.rook_button = PromotionButton(BLACK_ROOK, 50, 0)
-            self.bishop_button = PromotionButton(BLACK_BISHOP, 0, 50)
-            self.knight_button = PromotionButton(BLACK_KNIGHT, 50, 50)
-        
-        self.buttons = [
-            self.queen_button, self.rook_button, self.bishop_button, self.knight_button
-        ]
+            self.buttons = self.black_buttons
         
         for button in self.buttons:
             button.update_position(self.width, self.height, self.left, self.top)
@@ -55,10 +73,8 @@ class PromotionPopup(Popup):
         pygame.draw.rect(screen, GREY, (self.left, self.top, self.width, self.height))
         
         # buttons
-        self.queen_button.draw(screen, mouse_pos)
-        self.rook_button.draw(screen, mouse_pos)
-        self.bishop_button.draw(screen, mouse_pos)
-        self.knight_button.draw(screen, mouse_pos)
+        for button in self.buttons:
+            button.draw(screen, mouse_pos)
         
         # border
         pygame.draw.rect(screen, BLACK, (self.left, self.top, self.width, self.height), self.border_width)
@@ -74,13 +90,13 @@ class PromotionPopup(Popup):
     
     
     def handle_click(self, mouse_pos):
-        if self.queen_button.is_focused(mouse_pos):
+        if self.buttons[0].is_focused(mouse_pos):
             return 'q'
-        if self.rook_button.is_focused(mouse_pos):
+        if self.buttons[1].is_focused(mouse_pos):
             return 'r'
-        if self.bishop_button.is_focused(mouse_pos):
+        if self.buttons[2].is_focused(mouse_pos):
             return 'b'
-        if self.knight_button.is_focused(mouse_pos):
+        if self.buttons[3].is_focused(mouse_pos):
             return 'k'
         return None
 

@@ -1,17 +1,13 @@
 from pieces.piece import Piece
-from pieces.piece import BLACK_KNIGHT
-from pieces.piece import WHITE_KNIGHT
+from constants import KNIGHT_ID
 
 
 class Knight(Piece):
     def __init__(self, row, col, color):
+        self.id = KNIGHT_ID
         super().__init__(row, col, color)
-        self.id = 1
-        if self.color == 'black':
-            self.image = BLACK_KNIGHT
-        else:
-            self.image = WHITE_KNIGHT
-    
+
+
     def calculate_valid_moves(self, board, castle_rights, en_passant):
         valid_moves_table = [[False for _ in range(8)] for _ in range(8)]
         valid_moves_list = []

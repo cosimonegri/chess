@@ -1,19 +1,14 @@
-import pygame
-from pprint import pprint
-
-from pieces import Piece
 from pieces import Pawn
 from pieces import Knight
 from pieces import Bishop
 from pieces import Rook
 from pieces import Queen
 from pieces import King
-
-from helpers import stringify_move
+from constants import PAWN_ID, KNIGHT_ID, BISHOP_ID, ROOK_ID, QUEEN_ID
 
 
 class Board:
-    STARTING_FEN = '4k3/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     
     def __init__(self, fen=STARTING_FEN):
         self.board = [[None for _ in range(8)] for _ in range(8)]  # [row][col]
@@ -26,7 +21,14 @@ class Board:
         self.set_fen(fen)
         
         self.selected_piece = None
-        self.eaten_pieces = {0: [], 1: [], 2: [], 3: [], 4: []}
+        self.eaten_pieces = {
+            "white": {
+                PAWN_ID: 0, KNIGHT_ID: 0, BISHOP_ID: 0, ROOK_ID: 0, QUEEN_ID: 0
+            },
+            "black": {
+                PAWN_ID: 0, KNIGHT_ID: 0, BISHOP_ID: 0, ROOK_ID: 0, QUEEN_ID: 0
+            }
+        }
         
         self.white_king_pos = self.find_king("white")  # (row, col)
         self.black_king_pos = self.find_king("black")  # (row, col)
@@ -75,7 +77,7 @@ class Board:
         
         self.turn = "black" if splitted_fen[1] == "b" else "white"
         
-        print(splitted_fen[2])
+        
         if splitted_fen[2] != '-':
             self.castle_rights = splitted_fen[2]
         else:
@@ -230,8 +232,7 @@ class Board:
     
     
     def update_legal_moves(self, color=None):
-        '''Update the legal moves of the pieces with the specified color'''
-        ### all'inizio del mio turno aggiorno le mie
+        '''Update the legal moves of the pieces with the specified color. Call at the beginning of a player's turn.'''
         
         if color == None:
             color = self.turn
@@ -299,7 +300,7 @@ class Board:
             if piece.color == 'white': forward = -1
             else: forward = 1
             
-            self.eaten_pieces[0].append(self.board[piece.row - forward][piece.col])
+            self.eaten_pieces[piece.color][piece.id] += 1
             self.board[piece.row - forward][piece.col] = None
     
     
@@ -351,7 +352,7 @@ class Board:
         # move the selected piece and add it (if there is one) to the eaten pieces
         eaten_piece = self.move(start_row, start_col, end_row, end_col)
         if eaten_piece != None:
-            self.eaten_pieces[eaten_piece.id].append(eaten_piece)
+            self.eaten_pieces[eaten_piece.color][eaten_piece.id] += 1
         
         if piece.is_king():
             self.update_king_pos(end_row, end_col)
@@ -373,9 +374,6 @@ class Board:
                 self.promotion_square = (end_row, end_col)
             else:
                 self.board[end_row][end_col] = Queen(end_row, end_col, piece.color)
-        
-        # reset the possibility to perform en passant to none if you are the one who just moved
-        # if not from_server: self.reset_en_passant()
  
 
     def promote(self, new_piece: str, color: str):
@@ -391,16 +389,6 @@ class Board:
         
         self.board[row][col] = new_piece
         self.promotion_square = None
-    
-    
-    def end_turn_multi_player(self, client, start_row, start_col, end_row, end_col, promotion_piece='x'):
-        self.my_turn = False
-        print("Setting my turn to False")
-        
-        # sending move info to the server
-        response = client.send(stringify_move(
-            client.id, start_row, start_col, end_row, end_col, promotion_piece
-        ))
     
     
     def do_bot_move(self, bot_move):

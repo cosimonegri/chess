@@ -12,7 +12,11 @@ from constants import FPS, DRAWS_AFTER_MINIMIZE
 
 def run_multi_player(monitor_size, application_state, player_name):
     print("[GAME] multiplayer game started")
-    move_sound = pygame.mixer.Sound("./chess/assets/Sounds/move.wav")
+
+    try:
+        move_sound = pygame.mixer.Sound("./assets/Sounds/move.wav")
+    except:
+        move_sound = pygame.mixer.Sound("./chess/assets/Sounds/move.wav")
     
     game_state = {
         "mode": "multi player",
@@ -27,12 +31,12 @@ def run_multi_player(monitor_size, application_state, player_name):
         "client": None,
         "client_thread": None,
         "failed_connection": False,
-        "new_fen_board": None
+        "new_data": None
     }
     
     clock = pygame.time.Clock()
     board = Board()
-    board.update_pseudo_legal_moves()  # at the beginning check impossible
+    board.update_legal_moves()  # not pseudo even if at the beginning check is impossible, just to be sure
     
     connection_thread = ConnectionThread(connection_state, game_state, board)
     connection_thread.start()
@@ -50,6 +54,7 @@ def run_multi_player(monitor_size, application_state, player_name):
         clock.tick(FPS)
         
         if connection_state["failed_connection"]:
+            print("Connection failed")
             loading_screen.end_current()
             return
         elif game_state["enemy_name"] != None:  # an opponent has been found
@@ -92,8 +97,11 @@ def run_multi_player(monitor_size, application_state, player_name):
         
         
         # UPDATE THE BOARD WHEN THE OPPENENT HAS MOVED
-        if connection_state["new_fen_board"]:
-            board.set_fen(connection_state["new_fen_board"])
+        if connection_state["new_data"]:
+            new_fen_board, new_eaten_pieces = connection_state["new_data"]
+
+            board.set_fen(new_fen_board)  # this also updates the turn
+            board.eaten_pieces = new_eaten_pieces
             move_sound.play()
             
             # check if i have has lost
@@ -103,7 +111,7 @@ def run_multi_player(monitor_size, application_state, player_name):
             game_screen.update_content()
             game_state["remaining_draws"] += 1
             
-            connection_state["new_fen_board"] = None
+            connection_state["new_data"] = None
         
         
         # SHOW AND HIDE POPUPS
@@ -239,11 +247,11 @@ def handle_game_click_up(board, game_screen, client, move_sound):
                     board.update_legal_moves(board.turn)
                     board.check_if_loser(board.turn)
                     
-                    # sending new board to the server
-                    response = client.send(board.to_fen())
-                    if response != "received":
-                        print("Trying again to send the new board to the server")
-                        response = client.send(board.to_fen())
+                    # sending data to the server
+                    response = client.send((board.to_fen(), board.eaten_pieces))
+                    # while response != "received":
+                    #     print("Trying again to send the new board to the server")
+                    #     response = client.send((board.to_fen(), board.eaten_pieces))
         
     board.selected_piece = None
 
@@ -259,8 +267,8 @@ def handle_promotion_button_down(board, promotion_popup, game_state, client):
         board.update_legal_moves(board.turn)
         board.check_if_loser(board.turn)
         
-        # sending new board to the server
-        response = client.send(board.to_fen())
-        if response != "received":
-            print("Trying again to send the new board to the server")
-            response = client.send(board.to_fen())
+        # sending data to the server
+        response = client.send((board.to_fen(), board.eaten_pieces))
+        # while response != "received":
+        #     print("Trying again to send the new board to the server")
+        #     response = client.send((board.to_fen(), board.eaten_pieces))

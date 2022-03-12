@@ -1,25 +1,25 @@
 import socket
 import threading
-import pygame
 import pickle
 import ctypes
 import re
 from time import sleep
-
 from constants import TIMER
 
 
-# with open("server_ip.txt", "r") as f:
-#     line1 = f.readline()
-#     line2 = f.readline()
+with open("server_ip.txt", "r") as f:
+    line1 = f.readline()
+    line2 = f.readline()
+    line3 = f.readline()
 
-# host_pattern = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
-# port_pattern = re.compile(r'(\d{1,5})')
-# HOST = re.search(host_pattern, line1)[0]
-# PORT = int(re.search(port_pattern, line2)[0])
-
-HOST = "34.65.155.95"
-PORT = 3389
+if re.search(r'true', line1) != None:
+    host_pattern = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
+    port_pattern = re.compile(r'(\d{1,5})')
+    HOST = re.search(host_pattern, line2)[0]
+    PORT = int(re.search(port_pattern, line3)[0])
+else:
+    HOST = "34.65.155.95"
+    PORT = 3389
 
 
 class Client:
@@ -84,10 +84,10 @@ class ClientThread(MyThread):
             if self.board.turn != self.game_state["my_color"]:  # constantly check for status if it is not your turn
                 
                 try:
-                    new_fen_board = self.client.send("status")
-                    print(new_fen_board)
+                    data = self.client.send("status")
                     
-                    if new_fen_board != 0:
+                    if data != 0:
+                        new_fen_board, new_eaten_pieces = data
                         splitted_fen = new_fen_board.split()
                         
                         if self.game_state["my_color"] == "white":
@@ -96,7 +96,7 @@ class ClientThread(MyThread):
                             my_color = "b"
                         
                         if splitted_fen[1] == my_color:  # if you received the board and now it is your turn
-                            self.connection_state["new_fen_board"] = new_fen_board
+                            self.connection_state["new_data"] = data
                     
                     sleep(TIMER)
                 except:
@@ -121,6 +121,7 @@ class ConnectionThread(MyThread):
             self.connection_state["failed_connection"] = True
         else:
             self.game_state["my_color"] = "white" if client.id == 1 else "black"
+            self.game_state["enemy_color"] = "black" if client.id == 1 else "white"
             self.connection_state["client"] = client
         
         if not self.connection_state["failed_connection"]:

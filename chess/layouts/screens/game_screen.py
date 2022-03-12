@@ -1,6 +1,6 @@
 import pygame
 from layouts.screen import Screen
-from constants import BLACK, GREY, DARK_BROWN, LIGHT_BROWN, SELECT_COLOR
+from constants import BLACK, GREY, DARK_BROWN, LIGHT_BROWN, SELECT_COLOR, PIECES_PATHS, ALT_PIECES_PATHS
 
 # ratios relative to the tile size
 # small circle in the tile where you can move, big circle in the tiles where you can move and capture a piece
@@ -22,6 +22,14 @@ class GameScreen(Screen):
         self.small_font_size = small_font_size
         self.normal_color = normal_color
         self.highlight_color = highlight_color
+
+        self.pieces_images = {"white": [], "black": []}
+        try:
+            for key, value in ALT_PIECES_PATHS.items():
+                self.pieces_images[key] = list(map(lambda path: pygame.image.load(path), value))
+        except:
+            for key, value in PIECES_PATHS.items():
+                self.pieces_images[key] = list(map(lambda path: pygame.image.load(path), value))
     
     
     def draw(self, board):
@@ -172,9 +180,11 @@ class GameScreen(Screen):
     
     
     def draw_eaten_pieces(self, eaten_pieces):
+        print(eaten_pieces)
         win_width, win_height = self.win_size
         screen = self.screen
         piece_size = self.tile_size / 10 * 7
+        my_color, enemy_color = self.game_state["my_color"], self.game_state["enemy_color"]
         
         you_start_x = (win_width - win_height) / 4 - piece_size
         you_start_y = win_height / 10 * 2
@@ -185,19 +195,21 @@ class GameScreen(Screen):
         enemy_eaten_number = 0
         
         for piece_id in range(5):
-            for piece in eaten_pieces[piece_id]:
-                scaled_img = pygame.transform.scale(piece.image, (piece_size, piece_size))
-                
-                if piece.color != self.game_state["my_color"]:
-                    you_x = you_start_x + (piece_size * (you_eaten_number % 2))
-                    you_y = you_start_y + (piece_size * (you_eaten_number // 2))
-                    screen.blit(scaled_img.convert_alpha(), (you_x, you_y))
-                    you_eaten_number += 1
-                else:
-                    enemy_x = enemy_start_x + (piece_size * (enemy_eaten_number % 2))
-                    enemy_y = enemy_start_y + (piece_size * (enemy_eaten_number // 2))
-                    screen.blit(scaled_img.convert_alpha(), (enemy_x, enemy_y))
-                    enemy_eaten_number += 1
+            scaled_img = pygame.transform.scale(self.pieces_images[enemy_color][piece_id], (piece_size, piece_size))
+            for _ in range(eaten_pieces[enemy_color][piece_id]):
+
+                you_x = you_start_x + (piece_size * (you_eaten_number % 2))
+                you_y = you_start_y + (piece_size * (you_eaten_number // 2))
+                screen.blit(scaled_img.convert_alpha(), (you_x, you_y))
+                you_eaten_number += 1
+            
+            scaled_img = pygame.transform.scale(self.pieces_images[my_color][piece_id], (piece_size, piece_size))
+            for _ in range(eaten_pieces[my_color][piece_id]):
+
+                enemy_x = enemy_start_x + (piece_size * (enemy_eaten_number % 2))
+                enemy_y = enemy_start_y + (piece_size * (enemy_eaten_number // 2))
+                screen.blit(scaled_img.convert_alpha(), (enemy_x, enemy_y))
+                enemy_eaten_number += 1
     
     
     def get_board_row_col(self, mouse_pos):

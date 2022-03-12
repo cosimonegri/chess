@@ -1,17 +1,12 @@
 from pieces.piece import Piece
-from pieces.piece import BLACK_PAWN
-from pieces.piece import WHITE_PAWN
+from constants import PAWN_ID
 
 
 class Pawn(Piece):
     def __init__(self, row, col, color):
+        self.id = PAWN_ID
         super().__init__(row, col, color)
-        self.id = 0
-        self.just_first_move = False  # to handle the en passant move
-        if self.color == 'black':
-            self.image = BLACK_PAWN
-        else:
-            self.image = WHITE_PAWN
+    
     
     def calculate_valid_moves(self, board, castle_rights, en_passant):
         valid_moves_table = [[False for _ in range(8)] for _ in range(8)]

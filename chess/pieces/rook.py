@@ -1,17 +1,12 @@
 from pieces.piece import Piece
-from pieces.piece import BLACK_ROOK
-from pieces.piece import WHITE_ROOK
+from constants import ROOK_ID
 
 
 class Rook(Piece):
     def __init__(self, row, col, color):
+        self.id = ROOK_ID
         super().__init__(row, col, color)
-        self.id = 3
-        self.first_move = True
-        if self.color == 'black':
-            self.image = BLACK_ROOK
-        else:
-            self.image = WHITE_ROOK
+
     
     def calculate_valid_moves(self, board, castle_rights, en_passant):
         valid_moves_table = [[False for _ in range(8)] for _ in range(8)]

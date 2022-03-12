@@ -5,7 +5,6 @@ if __name__ == '__main__':
 
 
 # TODAY
-# sistemare pezzi mangiati multigiocatore (e forse anche struttura dati eaten_pieces)
 # se un utente esce, dare vittoria all'altro utente (anche giocatore che ha il turno chiede continuamente status)
 
 
@@ -18,6 +17,8 @@ if __name__ == '__main__':
 # regole strane per i 50 turni eccetrea (anche nelle fen board)
 # estetica settings single player
 # estetica popup loading (numero di puntini dinamico nel tempo, oppure rotella che gira)
+# ottimizzare conversione immagini pezzi (vedere se si può fare solo al cambio fullscreen)
+# vedere se possono non passare la board ai metodi draw tutte le volte in "game_screen.py"
 # aggiungere tempo nel multigiocatore ???
 
 

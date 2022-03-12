@@ -4,23 +4,30 @@ import pickle
 import re
 
 
-with open("server_ip.txt", "r") as f:
-    line1 = f.readline()
-    line2 = f.readline()
-
-host_pattern = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
-port_pattern = re.compile(r'(\d{1,5})')
-HOST = re.search(host_pattern, line1)[0]
-PORT = int(re.search(port_pattern, line2)[0])
-
-
+LOCAL_SERVER = True
 MAX_GAMES = 3 # <--- change this value to change the max number of games that the server can handle
 
 PLAYERS_CONNECTED = [{1: None, 2: None} for _ in range(MAX_GAMES)]
 NEW_BOARD = [{1: None, 2: None} for _ in range(MAX_GAMES)]
-# when the new_board is not None, the corresponding player has not read it. New_board expressed in fen notation.
+# when the new_board is not None, the corresponding player has not read it. New_board expressed in fen notation
 
-##########################################################################################
+
+if LOCAL_SERVER:
+    with open("server_ip.txt", "r") as f:
+        line1 = f.readline()
+        line2 = f.readline()
+        line3 = f.readline()
+
+    host_pattern = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
+    port_pattern = re.compile(r'(\d{1,5})')
+    HOST = re.search(host_pattern, line2)[0]
+    PORT = int(re.search(port_pattern, line3)[0])
+
+else:
+    HOST = ''
+    PORT = 3389
+
+
 
 def threaded_client(conn, address, game_index, current_player):
     print(f"\n\nSending player {current_player} {address} in game {game_index+1}")
@@ -75,7 +82,7 @@ def threaded_client(conn, address, game_index, current_player):
     print(f"\n\nLost connection with player {current_player} {address} in game {game_index+1}")
     conn.close()
     
-##########################################################################################
+
     
 def run():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,7 +92,7 @@ def run():
     except socket.error as e:
         print("Server creation failed with error %s" %(e))
 
-    server.listen(2)  # there can be a maximum of 2 users in the queue
+    server.listen(4)  # there can be a maximum of 4 users in the queue
     print("Server started on", (HOST, PORT))
     print("Waiting for a connection...")
 
@@ -110,3 +117,8 @@ def run():
         else:
             print(f"\n\nCould not connect with {address}: there are alreay {MAX_GAMES*2} players playing")
             conn.close()
+
+
+
+if __name__ == "__main__":
+    run()

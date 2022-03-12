@@ -4,10 +4,15 @@ from layouts.button import Button
 
 
 LOGO_SIZE_RATIO = 50
-LOGO_IMG = pygame.image.load('./chess/assets/Images/chess-logo.png')
 
-# original background image ratio width:height = 1.777
-BACKGROUND_IMG = pygame.image.load('./chess/assets/Images/chess-background.jpg')
+try:
+    LOGO_IMG = pygame.image.load('./assets/Images/chess-logo.png')
+    # original background image ratio width:height = 1.777
+    BACKGROUND_IMG = pygame.image.load('./assets/Images/chess-background.jpg')
+except:
+    LOGO_IMG = pygame.image.load('./chess/assets/Images/chess-logo.png')
+    # original background image ratio width:height = 1.777
+    BACKGROUND_IMG = pygame.image.load('./chess/assets/Images/chess-background.jpg')
 
 
 class MenuScreen(Screen):

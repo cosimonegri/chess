@@ -1,19 +1,27 @@
 import threading
 import pygame
-import time
 
 from layouts import MenuScreen, SingleplayerSettingsScreen, MultiplayerSettingsScreen
 from single_player import run_single_player
 from multi_player import run_multi_player
 
 from helpers import display_fps
-from constants import FPS, DRAWS_AFTER_MINIMIZE
+from constants import FPS, DRAWS_AFTER_MINIMIZE, MAX_NAME_LENGHT
 
-
-MAX_NAME_LENGHT = 10
 
 ICON_SIZE = 64
-ICON_IMG =  pygame.transform.scale(pygame.image.load('./chess/assets/Images/chess-icon.jpg'), (ICON_SIZE, ICON_SIZE))
+
+try:
+    ICON_IMG =  pygame.transform.scale(
+        pygame.image.load('./assets/Images/chess-icon.jpg'),
+        (ICON_SIZE, ICON_SIZE)
+    )
+except:
+    ICON_IMG =  pygame.transform.scale(
+        pygame.image.load('./chess/assets/Images/chess-icon.jpg'),
+        (ICON_SIZE, ICON_SIZE)
+    )
+
 
 
 def run():

@@ -11,7 +11,11 @@ from constants import FPS, DRAWS_AFTER_MINIMIZE
 
 def run_single_player(monitor_size, application_state, game_settings):
     print("[GAME] single player game started")
-    move_sound = pygame.mixer.Sound("./chess/assets/Sounds/move.wav")
+
+    try:
+        move_sound = pygame.mixer.Sound("./assets/Sounds/move.wav")
+    except:
+        move_sound = pygame.mixer.Sound("./chess/assets/Sounds/move.wav")
     
     player_color = game_settings[0]
     bot_level = game_settings[1]
@@ -29,7 +33,7 @@ def run_single_player(monitor_size, application_state, game_settings):
     
     clock = pygame.time.Clock()
     board = Board()
-    board.update_pseudo_legal_moves()  # at the beginning check impossible
+    board.update_legal_moves()  # not pseudo even if at the beginning check is impossible, just to be sure
     
     game_screen = GameScreen("Chess - single player", monitor_size, board, game_state)
     promotion_popup = PromotionPopup()

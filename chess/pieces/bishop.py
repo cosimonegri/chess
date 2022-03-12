@@ -1,17 +1,13 @@
 from pieces.piece import Piece
-from pieces.piece import BLACK_BISHOP
-from pieces.piece import WHITE_BISHOP
+from constants import BISHOP_ID
 
 
 class Bishop(Piece):
     def __init__(self, row, col, color):
+        self.id = BISHOP_ID
         super().__init__(row, col, color)
-        self.id = 2
-        if self.color == 'black':
-            self.image = BLACK_BISHOP
-        else:
-            self.image = WHITE_BISHOP
-    
+
+
     def calculate_valid_moves(self, board, castle_rights, en_passant):
         valid_moves_table = [[False for _ in range(8)] for _ in range(8)]
         valid_moves_list = []
