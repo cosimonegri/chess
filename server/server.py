@@ -64,8 +64,10 @@ def threaded_client(conn, address, game_index, current_player):
                 if NEW_BOARD[game_index][current_player] != None:
                     conn.sendall(pickle.dumps(NEW_BOARD[game_index][current_player]))
                     NEW_BOARD[game_index][current_player] = None
-                else:
+                elif PLAYERS_CONNECTED[game_index][1] and PLAYERS_CONNECTED[game_index][2]:  # still 2 players in the game
                     conn.sendall(pickle.dumps(0))
+                else:
+                    conn.sendall(pickle.dumps(1))  # 1 player left
             
             else:  # user sends the new fen board
                 print(f"Player {current_player} in game {game_index+1} did a move")
@@ -78,7 +80,8 @@ def threaded_client(conn, address, game_index, current_player):
             break
 
     PLAYERS_CONNECTED[game_index][current_player] = None
-    NEW_BOARD[game_index][current_player] = None
+    NEW_BOARD[game_index][1] = None
+    NEW_BOARD[game_index][2] = None
     print(f"\n\nLost connection with player {current_player} {address} in game {game_index+1}")
     conn.close()
     

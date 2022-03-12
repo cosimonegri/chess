@@ -5,12 +5,12 @@ if __name__ == '__main__':
 
 
 # TODAY
-# se un utente esce, dare vittoria all'altro utente (anche giocatore che ha il turno chiede continuamente status)
 
 
 # TOMORROW
 
 
+# testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no)
 # aggiungere tabelle end game per re e pedoni (+ logica di quando si entra in end game)
 # ai prova a fare scacco matto e non si muove a caso
 # forse ai non arrocca più

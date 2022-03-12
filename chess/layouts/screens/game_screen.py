@@ -180,7 +180,6 @@ class GameScreen(Screen):
     
     
     def draw_eaten_pieces(self, eaten_pieces):
-        print(eaten_pieces)
         win_width, win_height = self.win_size
         screen = self.screen
         piece_size = self.tile_size / 10 * 7

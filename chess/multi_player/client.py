@@ -80,13 +80,17 @@ class ClientThread(MyThread):
     
     
     def run(self):
-        while True:
+        while not self.connection_state["disconnecting"]:
             if self.board.turn != self.game_state["my_color"]:  # constantly check for status if it is not your turn
                 
                 try:
-                    data = self.client.send("status")
-                    
-                    if data != 0:
+                    data = self.client.send("status")  # 0 = still waiting, 1 = player disconnected, otherwise player did a move
+                    print(data)
+
+                    if data == 1:
+                        self.connection_state["opponent_disconnected"] = True
+
+                    elif data != 0:
                         new_fen_board, new_eaten_pieces = data
                         splitted_fen = new_fen_board.split()
                         
@@ -144,7 +148,7 @@ class ConnectionThread(MyThread):
             client_thread.start()
             self.connection_state["client_thread"] = client_thread
         
-        print("end connection thread")
+        print("successfully end connection thread")
     
     
     def check_for_opponent(self, client):

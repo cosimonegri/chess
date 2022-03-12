@@ -31,7 +31,9 @@ def run_multi_player(monitor_size, application_state, player_name):
         "client": None,
         "client_thread": None,
         "failed_connection": False,
-        "new_data": None
+        "new_data": None,
+        "disconnecting": False,
+        "opponent_disconnected": False
     }
     
     clock = pygame.time.Clock()
@@ -113,6 +115,13 @@ def run_multi_player(monitor_size, application_state, player_name):
             
             connection_state["new_data"] = None
         
+
+        # YOU WIN IF THE OPPONENT LEAVES
+        if connection_state["opponent_disconnected"]:
+            board.winner = game_state["my_color"]
+            game_screen.update_content()
+            game_state["remaining_draws"] += 1
+        
         
         # SHOW AND HIDE POPUPS
         if board.turn == game_state["my_color"] and board.promotion_square != None:
@@ -122,18 +131,19 @@ def run_multi_player(monitor_size, application_state, player_name):
         else:
             promotion_popup.hide()
         
-        if board.is_checkmate() or board.is_stalemate() and not game_end_popup.is_active():
-            game_end_popup.update(
-                game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
-            )
-            game_end_popup.show()
+        if board.is_checkmate() or board.is_stalemate() or connection_state["opponent_disconnected"]:
+            if not game_end_popup.is_active():
+                game_end_popup.update(
+                    game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
+                )
+                game_end_popup.show()
         
         
         # GET EVENTS
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_screen.end_current()
-                connection_state["client_thread"].raise_exception()
+                connection_state["disconnecting"] = True
                 print("kill client thread")
                 connection_state["client"].send("quit")
                 return
@@ -141,7 +151,7 @@ def run_multi_player(monitor_size, application_state, player_name):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     game_screen.end_current()
-                    connection_state["client_thread"].raise_exception()
+                    connection_state["disconnecting"] = True
                     print("kill client thread")
                     connection_state["client"].send("quit")
                     return
@@ -178,7 +188,7 @@ def run_multi_player(monitor_size, application_state, player_name):
                     back_to_menu = game_end_popup.handle_click(mouse_pos)
                     if back_to_menu:
                         game_screen.end_current()
-                        connection_state["client_thread"].raise_exception()
+                        connection_state["disconnecting"] = True
                         print("kill client thread")
                         connection_state["client"].send("quit")
                         return
@@ -249,9 +259,9 @@ def handle_game_click_up(board, game_screen, client, move_sound):
                     
                     # sending data to the server
                     response = client.send((board.to_fen(), board.eaten_pieces))
-                    # while response != "received":
-                    #     print("Trying again to send the new board to the server")
-                    #     response = client.send((board.to_fen(), board.eaten_pieces))
+                    while response != "received":
+                        print("Trying again to send the new board to the server")
+                        response = client.send((board.to_fen(), board.eaten_pieces))
         
     board.selected_piece = None
 
@@ -269,6 +279,6 @@ def handle_promotion_button_down(board, promotion_popup, game_state, client):
         
         # sending data to the server
         response = client.send((board.to_fen(), board.eaten_pieces))
-        # while response != "received":
-        #     print("Trying again to send the new board to the server")
-        #     response = client.send((board.to_fen(), board.eaten_pieces))
+        while response != "received":
+            print("Trying again to send the new board to the server")
+            response = client.send((board.to_fen(), board.eaten_pieces))
