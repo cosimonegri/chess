@@ -1,6 +1,7 @@
 import pygame
 from layouts.screen import Screen
 from layouts.button import Button
+from constants import BACKGROUND_FADE
 
 
 LOGO_SIZE_RATIO = 50
@@ -40,7 +41,7 @@ class MenuScreen(Screen):
         self.screen.fill(self.fill_color)
         
         BACKGROUND_IMG.convert()
-        BACKGROUND_IMG.set_alpha(200)
+        BACKGROUND_IMG.set_alpha(BACKGROUND_FADE)
         background = pygame.transform.scale(BACKGROUND_IMG, self.win_size)
         self.screen.blit(background, (0, 0))
         

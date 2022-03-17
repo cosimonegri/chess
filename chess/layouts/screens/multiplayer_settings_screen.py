@@ -2,8 +2,15 @@ import pygame
 from layouts.screen import Screen
 from layouts.button import Button
 
-from constants import BLACK, GREY, SELECT_COLOR
+from constants import BLACK, GREY, DARK_GREY, SELECT_COLOR, BACKGROUND_FADE
 
+
+try:
+    # original background image ratio width:height = 1.777
+    BACKGROUND_IMG = pygame.image.load('./assets/Images/chess-background.jpg')
+except:
+    # original background image ratio width:height = 1.777
+    BACKGROUND_IMG = pygame.image.load('./chess/assets/Images/chess-background.jpg')
 
 
 class MultiplayerSettingsScreen(Screen):
@@ -33,6 +40,11 @@ class MultiplayerSettingsScreen(Screen):
     
     def draw(self, mouse_pos, player_name):
         self.screen.fill(self.fill_color)
+
+        BACKGROUND_IMG.convert()
+        BACKGROUND_IMG.set_alpha(BACKGROUND_FADE)
+        background = pygame.transform.scale(BACKGROUND_IMG, self.win_size)
+        self.screen.blit(background, (0, 0))
         
         self.text_input.draw(self.screen, player_name)
         self.start_button.draw(self.screen, mouse_pos, player_name)
@@ -56,10 +68,11 @@ class TextInput():
     TEXT_INPUT_TOP_RATIO = 25
 
     def __init__(self, left_ratio=None, top_ratio=TEXT_INPUT_TOP_RATIO, w_ratio=TEXT_INPUT_W_RATIO,
-        h_ratio=TEXT_INPUT_H_RATIO, color=GREY, hover_color=SELECT_COLOR, text_color=BLACK,
+        h_ratio=TEXT_INPUT_H_RATIO, color=GREY, hover_color=SELECT_COLOR, text_color1=BLACK, text_color2=DARK_GREY,
         font_name="Roboto", big_font_size=50, small_font_size=34
     ):  
         self.text = ""
+        self.alt_text = "Type your name here"
         self.selected = False
         
         self.left_ratio = left_ratio
@@ -72,7 +85,8 @@ class TextInput():
         self.font_name = font_name
         self.small_font_size = small_font_size
         self.big_font_size = big_font_size
-        self.text_color = text_color
+        self.text_color1 = text_color1
+        self.text_color2 = text_color2
     
     
     def is_focused(self, mouse_pos):
@@ -88,8 +102,15 @@ class TextInput():
         else:
             font_size = self.small_font_size
         
+        if self.text or self.selected:
+            text = self.text
+            color = self.text_color1
+        else:
+            text = self.alt_text
+            color = self.text_color2
+        
         self.font = pygame.font.SysFont(self.font_name, font_size)
-        self.text_surface = self.font.render(self.text, 1, self.text_color)
+        self.text_surface = self.font.render(text, 1, color)
     
     
     def update_position(self, win_size):

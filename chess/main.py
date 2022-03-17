@@ -219,6 +219,7 @@ def run_multiplayer_settings_screen(screen, application_state):
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                 is_typing, start_game = screen.handle_click(mouse_pos, player_name)
+                screen.update_content(player_name)
                 
                 if start_game:
                     screen.end_current()
