@@ -46,7 +46,7 @@ class GameScreen(Screen):
     
     def update_content(self):
         win_width, win_height = self.win_size
-        self.tile_size = win_height / 8
+        self.tile_size = win_height // 8
         
         if self.fullscreen:
             self.font = pygame.font.SysFont(self.font_name, self.big_font_size)
@@ -74,14 +74,14 @@ class GameScreen(Screen):
             for col in range(0, 8, 2):
                 if row % 2 == 0:
                     pygame.draw.rect(screen, LIGHT_BROWN, (col*tile_size + \
-                        (win_width - win_height) / 2, row*tile_size, tile_size, tile_size))
+                        (win_width - win_height) // 2, row*tile_size, tile_size, tile_size))
                     pygame.draw.rect(screen, DARK_BROWN, ((col+1)*tile_size + \
-                        (win_width - win_height) / 2, row*tile_size, tile_size, tile_size))
+                        (win_width - win_height) // 2, row*tile_size, tile_size, tile_size))
                 else:
                     pygame.draw.rect(screen, DARK_BROWN, (col*tile_size + \
-                        (win_width - win_height) / 2, row*tile_size, tile_size, tile_size))
+                        (win_width - win_height) // 2, row*tile_size, tile_size, tile_size))
                     pygame.draw.rect(screen, LIGHT_BROWN, ((col+1)*tile_size + \
-                        (win_width - win_height) / 2, row*tile_size, tile_size, tile_size))
+                        (win_width - win_height) // 2, row*tile_size, tile_size, tile_size))
     
     
     def draw_pieces(self, board):
@@ -104,7 +104,7 @@ class GameScreen(Screen):
                         draw_row = row
                     
                     screen.blit(scaled_img.convert_alpha(),
-                        (draw_col*tile_size + (win_width - win_height) / 2, draw_row*tile_size)
+                        (draw_col*tile_size + (win_width - win_height) // 2, draw_row*tile_size)
                     )
     
     
@@ -127,13 +127,13 @@ class GameScreen(Screen):
         
             if board[row][col] == None:
                 pygame.draw.circle(screen, SELECT_COLOR,
-                    (draw_col*tile_size + tile_size/2+ (win_width - win_height) / 2,
-                    draw_row*tile_size + tile_size/2), small_circle_radius
+                    (draw_col*tile_size + tile_size//2+ (win_width - win_height) // 2,
+                    draw_row*tile_size + tile_size//2), small_circle_radius
                 )
             else:
                 pygame.draw.circle(screen, SELECT_COLOR,
-                    (draw_col*tile_size + tile_size/2+ (win_width - win_height) / 2,
-                     draw_row*tile_size + tile_size/2), big_circle_radius, width=big_circle_width
+                    (draw_col*tile_size + tile_size//2+ (win_width - win_height) // 2,
+                     draw_row*tile_size + tile_size//2), big_circle_radius, width=big_circle_width
                 )
     
     
@@ -153,7 +153,7 @@ class GameScreen(Screen):
         
         # highlight the tile to hide the original piece
         pygame.draw.rect(
-            screen, SELECT_COLOR, (draw_col*tile_size + (win_width - win_height) / 2,
+            screen, SELECT_COLOR, (draw_col*tile_size + (win_width - win_height) // 2,
             draw_row*tile_size, tile_size, tile_size)
         )
         
@@ -166,13 +166,13 @@ class GameScreen(Screen):
     
     def draw_players_info(self):
         win_width, win_height = self.win_size
-        top_offset = win_height / 100 * 5
+        top_offset = win_height // 100 * 5
         
         my_name_rect = self.my_name_surface.get_rect(
-            center=((win_width - win_height) / 4, top_offset)
+            center=((win_width - win_height) // 4, top_offset)
         )
         enemy_name_rect = self.enemy_name_surface.get_rect(
-            center=(win_height + (win_width - win_height) * 3 / 4, top_offset)
+            center=(win_height + (win_width - win_height) * 3 // 4, top_offset)
         )
         
         self.screen.blit(self.my_name_surface, my_name_rect)
@@ -182,13 +182,13 @@ class GameScreen(Screen):
     def draw_eaten_pieces(self, eaten_pieces):
         win_width, win_height = self.win_size
         screen = self.screen
-        piece_size = self.tile_size / 10 * 7
+        piece_size = self.tile_size // 10 * 7
         my_color, enemy_color = self.game_state["my_color"], self.game_state["enemy_color"]
         
-        you_start_x = (win_width - win_height) / 4 - piece_size
-        you_start_y = win_height / 10 * 2
-        enemy_start_x = win_height + (win_width - win_height) / 4 * 3 - piece_size
-        enemy_start_y = win_height / 10 * 2
+        you_start_x = (win_width - win_height) // 4 - piece_size
+        you_start_y = win_height // 10 * 2
+        enemy_start_x = win_height + (win_width - win_height) // 4 * 3 - piece_size
+        enemy_start_y = win_height // 10 * 2
         
         you_eaten_number = 0
         enemy_eaten_number = 0
@@ -214,7 +214,7 @@ class GameScreen(Screen):
     def get_board_row_col(self, mouse_pos):
         x, y = mouse_pos
         win_width, win_height = self.win_size
-        tile_size = win_height / 8
+        tile_size = win_height // 8
         if self.game_state["my_color"] == "white":
             row = int(y // tile_size)
             col = int((x - (win_width - win_height) // 2) // tile_size)

@@ -1,7 +1,7 @@
 import pygame
 from layouts.screen import Screen
 from layouts.button import Button
-from constants import BACKGROUND_FADE
+from constants import BACKGROUND_FADE, RED
 
 
 LOGO_SIZE_RATIO = 50
@@ -17,24 +17,51 @@ except:
 
 
 class MenuScreen(Screen):
-    def __init__(self, title, monitor_size):
+    FIRST_BUTTON_TOP_RATIO = 50
+    SECOND_BUTTON_TOP_RATIO = 68
+    INFO_TEXT = "Press 'F ' to toggle fullscreen on and off"
+    INFO_VERTICAL_CENTER_RATIO = 92
+
+    def __init__(self, title, monitor_size, first_top_ratio=FIRST_BUTTON_TOP_RATIO,
+        second_top_ratio=SECOND_BUTTON_TOP_RATIO, info_vertical_center_ratio=INFO_VERTICAL_CENTER_RATIO,
+        text=INFO_TEXT, text_color=RED, font_name="Roboto", small_font_size=32, big_font_size=48
+    ):
         super().__init__(title, monitor_size)
         
-        self.single_player_button = MenuButton("Single Player", 1.6)
-        self.multi_player_button = MenuButton("Multiplayer", 1.2)
+        self.single_player_button = MenuButton("Single Player", first_top_ratio)
+        self.multi_player_button = MenuButton("Multiplayer", second_top_ratio)
+
+        self.info_vertical_center_ratio = info_vertical_center_ratio
+        self.text = text
+        self.text_color = text_color
+        self.font_name = font_name
+        self.small_font_size = small_font_size
+        self.big_font_size = big_font_size
     
     
     def update_content(self):
         self.single_player_button.update_position(self.win_size)
         self.multi_player_button.update_position(self.win_size)
-        
         self.single_player_button.update_font_size(self.fullscreen)
         self.multi_player_button.update_font_size(self.fullscreen)
+
+        if self.fullscreen:
+            font_size = self.big_font_size
+        else:
+            font_size = self.small_font_size
+        self.font = pygame.font.SysFont(self.font_name, font_size, italic=True)
+        self.text_surface = self.font.render(self.text, 1, self.text_color)
     
     
     def draw(self, mouse_pos):
         self.draw_background()
         self.draw_buttons(mouse_pos)
+
+        win_width, win_height = self.win_size
+        text_rect = self.text_surface.get_rect(
+            center=(win_width // 2, (win_height * self.info_vertical_center_ratio) // 100)
+        )
+        self.screen.blit(self.text_surface, text_rect)
     
     
     def draw_background(self):
@@ -46,10 +73,10 @@ class MenuScreen(Screen):
         self.screen.blit(background, (0, 0))
         
         width, height = self.win_size
-        size = (LOGO_SIZE_RATIO*height) / 100
+        size = (LOGO_SIZE_RATIO*height) // 100
         LOGO_IMG.convert_alpha()
         logo = pygame.transform.scale(LOGO_IMG, (size, size))
-        self.screen.blit(logo, ((width - size) / 2, 0))
+        self.screen.blit(logo, ((width - size) // 2, 0))
     
     
     def draw_buttons(self, mouse_pos):
@@ -82,10 +109,10 @@ class MenuButton(Button):
         
         
     def update_position(self, win_size):
-        self.width = (win_size[0] * self.w_ratio) / 100
-        self.height = (win_size[1] * self.h_ratio) / 100
-        self.left = (win_size[0] - self.width) / 2
-        self.top = (win_size[1] - self.height) / self.top_ratio
+        self.width = (win_size[0] * self.w_ratio) // 100
+        self.height = (win_size[1] * self.h_ratio) // 100
+        self.left = (win_size[0] - self.width) // 2
+        self.top = (win_size[1] * self.top_ratio) // 100
     
     
     def draw(self, screen, mouse_pos):
@@ -97,6 +124,6 @@ class MenuButton(Button):
         
         pygame.draw.rect(screen, background_color, (self.left, self.top, self.width, self.height))
         text_rect = self.text_surface.get_rect(
-            center=(self.left + (self.width/2), self.top + (self.height/2))
+            center=(self.left + (self.width//2), self.top + (self.height//2))
         )
         screen.blit(self.text_surface, text_rect)

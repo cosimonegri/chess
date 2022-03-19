@@ -13,7 +13,6 @@ if __name__ == '__main__':
 # testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no)
 # aggiungere tabelle end game per re e pedoni (+ logica di quando si entra in end game)
 # ai prova a fare scacco matto e non si muove a caso
-# forse ai non arrocca più
 # regole strane per i 50 turni eccetrea (anche nelle fen board)
 # estetica settings single player
 # estetica popup loading (numero di puntini dinamico nel tempo, oppure rotella che gira)

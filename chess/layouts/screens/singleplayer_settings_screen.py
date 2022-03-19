@@ -103,7 +103,7 @@ class SinglePlayerButton(Button):
             top_ratio = START_BUTTON_TOP_RATIO
             padding_ratio = 0
             
-            start_left_ratio = (100 - w_ratio) / 2
+            start_left_ratio = (100 - w_ratio) // 2
             button_number = 0
         else:
             if type(self.id) == str:
@@ -112,7 +112,7 @@ class SinglePlayerButton(Button):
                 top_ratio = COLOR_BUTTON_TOP_RATIO
                 padding_ratio = COLOR_BUTTON_PADDING_RATIO
                 
-                start_left_ratio = (100 - w_ratio*2 - padding_ratio) / 2
+                start_left_ratio = (100 - w_ratio*2 - padding_ratio) // 2
                 button_number = 0 if self.id == "white" else 1
             else:
                 w_ratio = LEVEL_BUTTON_W_RATIO
@@ -120,7 +120,7 @@ class SinglePlayerButton(Button):
                 top_ratio = LEVEL_BUTTON_TOP_RATIO
                 padding_ratio = LEVEL_BUTTON_PADDING_RATIO
                 
-                start_left_ratio = (100 - w_ratio*LEVELS_NUMBER - padding_ratio*(LEVELS_NUMBER-1)) / 2
+                start_left_ratio = (100 - w_ratio*LEVELS_NUMBER - padding_ratio*(LEVELS_NUMBER-1)) // 2
                 button_number = self.id - 1
         
         left_ratio = start_left_ratio + (w_ratio + padding_ratio) * button_number
@@ -128,10 +128,10 @@ class SinglePlayerButton(Button):
     
     
     def update_position(self, win_size):
-        self.left = (win_size[0] * self.left_ratio) / 100
-        self.top = (win_size[1] * self.top_ratio) / 100
-        self.width = (win_size[0] * self.w_ratio) / 100
-        self.height = (win_size[1] * self.h_ratio) / 100
+        self.left = (win_size[0] * self.left_ratio) // 100
+        self.top = (win_size[1] * self.top_ratio) // 100
+        self.width = (win_size[0] * self.w_ratio) // 100
+        self.height = (win_size[1] * self.h_ratio) // 100
     
     
     def draw(self, screen, mouse_pos, selected_buttons_id):
@@ -142,6 +142,6 @@ class SinglePlayerButton(Button):
         
         pygame.draw.rect(screen, background_color, (self.left, self.top, self.width, self.height))
         text_rect = self.text_surface.get_rect(
-            center=(self.left + (self.width/2), self.top + (self.height/2))
+            center=(self.left + (self.width//2), self.top + (self.height//2))
         )
         screen.blit(self.text_surface, text_rect)

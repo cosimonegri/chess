@@ -114,10 +114,10 @@ class TextInput():
     
     
     def update_position(self, win_size):
-        self.width = (win_size[0] * self.w_ratio) / 100
-        self.height = (win_size[1] * self.h_ratio) / 100
-        self.left = (win_size[0] - self.width) / 2
-        self.top = (win_size[1] * self.top_ratio) / 100
+        self.width = (win_size[0] * self.w_ratio) // 100
+        self.height = (win_size[1] * self.h_ratio) // 100
+        self.left = (win_size[0] - self.width) // 2
+        self.top = (win_size[1] * self.top_ratio) // 100
     
     
     def draw(self, screen, player_name):
@@ -128,7 +128,7 @@ class TextInput():
         
         pygame.draw.rect(screen, background_color, (self.left, self.top, self.width, self.height))
         text_rect = self.text_surface.get_rect(
-            center=(self.left + (self.width/2), self.top + (self.height/2))
+            center=(self.left + (self.width//2), self.top + (self.height//2))
         )
         screen.blit(self.text_surface, text_rect)
 
@@ -147,10 +147,10 @@ class MultiPlayerButton(Button):
     
     
     def update_position(self, win_size):
-        self.width = (win_size[0] * self.w_ratio) / 100
-        self.height = (win_size[1] * self.h_ratio) / 100
-        self.left = (win_size[0] - self.width) / 2
-        self.top = (win_size[1] * self.top_ratio) / 100
+        self.width = (win_size[0] * self.w_ratio) // 100
+        self.height = (win_size[1] * self.h_ratio) // 100
+        self.left = (win_size[0] - self.width) // 2
+        self.top = (win_size[1] * self.top_ratio) // 100
     
     
     def draw(self, screen, mouse_pos, player_name):
@@ -161,6 +161,6 @@ class MultiPlayerButton(Button):
         
         pygame.draw.rect(screen, background_color, (self.left, self.top, self.width, self.height))
         text_rect = self.text_surface.get_rect(
-            center=(self.left + (self.width/2), self.top + (self.height/2))
+            center=(self.left + (self.width//2), self.top + (self.height//2))
         )
         screen.blit(self.text_surface, text_rect)

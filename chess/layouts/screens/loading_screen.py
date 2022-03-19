@@ -26,7 +26,7 @@ class LoadingScreen(Screen):
         
         self.text_surface = self.font.render(self.text, 1, self.text_color)
         self.text_rect = self.text_surface.get_rect(
-            center=(win_width / 2, win_height / 2)
+            center=(win_width // 2, win_height // 2)
         )
     
     

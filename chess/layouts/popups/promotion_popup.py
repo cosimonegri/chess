@@ -52,10 +52,10 @@ class PromotionPopup(Popup):
     
     def update(self, win_size, player_color):
         win_width, win_height = win_size
-        self.width = (win_width * self.width_ratio) / 100
-        self.height = (win_height * self.height_ratio) / 100
-        self.left = (win_width - self.width) / 2
-        self.top = (win_height - self.height) / 2
+        self.width = (win_width * self.width_ratio) // 100
+        self.height = (win_height * self.height_ratio) // 100
+        self.left = (win_width - self.width) // 2
+        self.top = (win_height - self.height) // 2
         
         if player_color == "white":
             self.buttons = self.white_buttons
@@ -116,10 +116,10 @@ class PromotionButton(Button):
     
     
     def update_position(self, popup_width, popup_height, popup_left, popup_top):
-        self.width = (popup_width * self.w_ratio) / 100
-        self.height = (popup_height * self.h_ratio) / 100
-        self.left = popup_left + (popup_width * self.left_ratio) / 100
-        self.top = popup_top + (popup_height * self.top_ratio) / 100
+        self.width = (popup_width * self.w_ratio) // 100
+        self.height = (popup_height * self.h_ratio) // 100
+        self.left = popup_left + (popup_width * self.left_ratio) // 100
+        self.top = popup_top + (popup_height * self.top_ratio) // 100
     
     
     def draw(self, screen, mouse_pos):

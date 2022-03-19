@@ -38,10 +38,10 @@ class GameEndPopup(Popup):
     
     def update_position(self, win_size):
         win_width, win_height = win_size
-        self.width = (win_width * self.width_ratio) / 100
-        self.height = (win_height * self.height_ratio) / 100
-        self.left = (win_width - self.width) / 2
-        self.top = (win_height - self.height) / 2
+        self.width = (win_width * self.width_ratio) // 100
+        self.height = (win_height * self.height_ratio) // 100
+        self.left = (win_width - self.width) // 2
+        self.top = (win_height - self.height) // 2
     
     
     def update_font(self, fullscreen):
@@ -70,13 +70,13 @@ class GameEndPopup(Popup):
         # background and border
         pygame.draw.rect(screen, GREY, (self.left, self.top, self.width, self.height))
         pygame.draw.rect(screen, BLACK, (self.left, self.top, self.width, self.height), self.border_width)
-        pygame.draw.line(screen, BLACK, (self.left, self.top + (self.height / line_top_ratio)),
-            (self.left + self.width - self.border_width, self.top + (self.height / line_top_ratio)), line_width
+        pygame.draw.line(screen, BLACK, (self.left, self.top + (self.height // line_top_ratio)),
+            (self.left + self.width - self.border_width, self.top + (self.height // line_top_ratio)), line_width
         )
         
         # win, loss, draw message
         text_rect = self.text_surface.get_rect(
-            center=(self.left + (self.width/2), 0), top = self.top + self.height/10
+            center=(self.left + (self.width//2), 0), top = self.top + self.height//10
         )
         screen.blit(self.text_surface, text_rect)
         
@@ -106,10 +106,10 @@ class GameEndButton(Button):
     
     
     def update_position(self, popup_width, popup_height, popup_left, popup_top):
-        self.width = (popup_width * self.w_ratio) / 100
-        self.height = (popup_height * self.h_ratio) / 100
-        self.left = popup_left + (popup_width - self.width) / 2
-        self.top = popup_top + (popup_height * self.top_ratio) / 100
+        self.width = (popup_width * self.w_ratio) // 100
+        self.height = (popup_height * self.h_ratio) // 100
+        self.left = popup_left + (popup_width - self.width) // 2
+        self.top = popup_top + (popup_height * self.top_ratio) // 100
     
     
     def update_font(self, font):
@@ -125,6 +125,6 @@ class GameEndButton(Button):
         
         pygame.draw.rect(screen, background_color, (self.left, self.top, self.width, self.height))
         text_rect = self.text_surface.get_rect(
-            center=(self.left + self.width/2, self.top + self.height/2)
+            center=(self.left + self.width//2, self.top + self.height//2)
         )
         screen.blit(self.text_surface, text_rect)
