@@ -4,7 +4,7 @@ import pygame
 WIN_WIDTH = 850
 WIN_HEIGHT = 520
 
-BACKGROUND_FADE = 200
+BACKGROUND_FADE = 200  # to fade the background
 
 # Main colors
 WHITE = (255, 255, 255)
@@ -17,6 +17,7 @@ SELECT_COLOR = (249,188,56)
 RED = (255,30,30)
 
 
+LOADING_POINTS_NUM = 4  # max number of dynamic points in the loading screen animation
 MAX_NAME_LENGHT = 10
 FPS = 80
 TIMER = 0.5  # time between requests to the server

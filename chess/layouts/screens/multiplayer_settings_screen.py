@@ -2,15 +2,7 @@ import pygame
 from layouts.screen import Screen
 from layouts.button import Button
 
-from constants import BLACK, GREY, DARK_GREY, SELECT_COLOR, BACKGROUND_FADE
-
-
-try:
-    # original background image ratio width:height = 1.777
-    BACKGROUND_IMG = pygame.image.load('./assets/Images/chess-background.jpg')
-except:
-    # original background image ratio width:height = 1.777
-    BACKGROUND_IMG = pygame.image.load('./chess/assets/Images/chess-background.jpg')
+from constants import BLACK, GREY, DARK_GREY, SELECT_COLOR
 
 
 class MultiplayerSettingsScreen(Screen):
@@ -41,10 +33,10 @@ class MultiplayerSettingsScreen(Screen):
     def draw(self, mouse_pos, player_name):
         self.screen.fill(self.fill_color)
 
-        BACKGROUND_IMG.convert()
-        BACKGROUND_IMG.set_alpha(BACKGROUND_FADE)
-        background = pygame.transform.scale(BACKGROUND_IMG, self.win_size)
-        self.screen.blit(background, (0, 0))
+        if self.fullscreen:
+            self.screen.blit(self.big_background, (0, 0))
+        else:
+            self.screen.blit(self.small_background, (0, 0))
         
         self.text_input.draw(self.screen, player_name)
         self.start_button.draw(self.screen, mouse_pos, player_name)

@@ -120,35 +120,40 @@ class ConnectionThread(MyThread):
     
     
     def run(self):
-        client = Client()
-        if client.id == -1:  # could not connect with the server
-            self.connection_state["failed_connection"] = True
-        else:
-            self.game_state["my_color"] = "white" if client.id == 1 else "black"
-            self.game_state["enemy_color"] = "black" if client.id == 1 else "white"
-            self.connection_state["client"] = client
-        
-        if not self.connection_state["failed_connection"]:
-            message = "myname" + self.game_state["my_name"]
+
+        try:
+            client = Client()
+            if client.id == -1:  # could not connect with the server
+                self.connection_state["failed_connection"] = True
+            else:
+                self.game_state["my_color"] = "white" if client.id == 1 else "black"
+                self.game_state["enemy_color"] = "black" if client.id == 1 else "white"
+                self.connection_state["client"] = client
             
-            response = client.send(message)
-            if response != "received":
-                print("Trying again to send my name to the server")
+
+            if not self.connection_state["failed_connection"]:
+                message = "myname" + self.game_state["my_name"]
                 response = client.send(message)
+                if response != "received":
+                    print("Trying again to send my name to the server")
+                    response = client.send(message)
+                
+                print("Waiting for an opponent...")
+                while not self.connection_state["failed_connection"] and self.check_for_opponent(client) == False:
+                    sleep(TIMER)
+                
+                if not self.connection_state["failed_connection"]:
+                    print("Opponent found")
+                    enemy_name = client.send("enemyname")
+                    self.game_state["enemy_name"] = enemy_name
+                    client_thread = ClientThread(client, self.board, self.connection_state, self.game_state)
+                    client_thread.start()
+                    self.connection_state["client_thread"] = client_thread
             
-            print("Waiting for an opponent...")
-            while self.check_for_opponent(client) == False:
-                sleep(TIMER)
-            print("Opponent found")
-            
-            enemy_name = client.send("enemyname")
-            self.game_state["enemy_name"] = enemy_name
-            
-            client_thread = ClientThread(client, self.board, self.connection_state, self.game_state)
-            client_thread.start()
-            self.connection_state["client_thread"] = client_thread
+            print("successfully end connection thread")
         
-        print("successfully end connection thread")
+        except:
+            print("killing conenction thread")
     
     
     def check_for_opponent(self, client):

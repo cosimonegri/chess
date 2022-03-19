@@ -8,12 +8,8 @@ LOGO_SIZE_RATIO = 50
 
 try:
     LOGO_IMG = pygame.image.load('./assets/Images/chess-logo.png')
-    # original background image ratio width:height = 1.777
-    BACKGROUND_IMG = pygame.image.load('./assets/Images/chess-background.jpg')
 except:
     LOGO_IMG = pygame.image.load('./chess/assets/Images/chess-logo.png')
-    # original background image ratio width:height = 1.777
-    BACKGROUND_IMG = pygame.image.load('./chess/assets/Images/chess-background.jpg')
 
 
 class MenuScreen(Screen):
@@ -67,10 +63,10 @@ class MenuScreen(Screen):
     def draw_background(self):
         self.screen.fill(self.fill_color)
         
-        BACKGROUND_IMG.convert()
-        BACKGROUND_IMG.set_alpha(BACKGROUND_FADE)
-        background = pygame.transform.scale(BACKGROUND_IMG, self.win_size)
-        self.screen.blit(background, (0, 0))
+        if self.fullscreen:
+            self.screen.blit(self.big_background, (0, 0))
+        else:
+            self.screen.blit(self.small_background, (0, 0))
         
         width, height = self.win_size
         size = (LOGO_SIZE_RATIO*height) // 100

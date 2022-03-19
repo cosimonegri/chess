@@ -1,13 +1,13 @@
 import pygame
 import threading
-from time import sleep
+import time
 
 from board import Board
 from layouts import LoadingScreen, GameScreen, PromotionPopup, GameEndPopup
 
 from multi_player.client import ConnectionThread
 from helpers import display_fps
-from constants import FPS, DRAWS_AFTER_MINIMIZE
+from constants import FPS, DRAWS_AFTER_MINIMIZE, LOADING_POINTS_NUM
 
 
 def run_multi_player(monitor_size, application_state, player_name):
@@ -49,12 +49,22 @@ def run_multi_player(monitor_size, application_state, player_name):
     promotion_popup = PromotionPopup()
     game_end_popup = GameEndPopup()
     loading_screen.make_current(application_state["fullscreen"])
+
+    points_num = None  ## number of dots in the loading screen animation
     
-    
+
     # LOADING SCREEN AND SETUP
     while loading_screen.is_current():
         clock.tick(FPS)
+
+        seconds = time.time()
+        old_points_num = points_num
+        points_num = int(seconds % 1 // (1.0 / (LOADING_POINTS_NUM + 1)))
+        if points_num != old_points_num:
+            loading_screen.set_points(points_num)
+            loading_screen.update_content()
         
+
         if connection_state["failed_connection"]:
             print("Connection failed")
             loading_screen.end_current()
@@ -67,6 +77,7 @@ def run_multi_player(monitor_size, application_state, player_name):
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT:
+                connection_state["failed_connection"] = True
                 loading_screen.end_current()
                 connection_thread.raise_exception()
                 print("kill connection thread")
@@ -74,6 +85,7 @@ def run_multi_player(monitor_size, application_state, player_name):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    connection_state["failed_connection"] = True
                     loading_screen.end_current()
                     connection_thread.raise_exception()
                     print("kill connection thread")

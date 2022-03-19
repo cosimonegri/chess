@@ -15,7 +15,6 @@ if __name__ == '__main__':
 # ai prova a fare scacco matto e non si muove a caso
 # regole strane per i 50 turni eccetrea (anche nelle fen board)
 # estetica settings single player
-# estetica popup loading (numero di puntini dinamico nel tempo, oppure rotella che gira)
 # ottimizzare conversione immagini pezzi (vedere se si può fare solo al cambio fullscreen)
 # vedere se possono non passare la board ai metodi draw tutte le volte in "game_screen.py"
 # aggiungere tempo nel multigiocatore ???

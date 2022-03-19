@@ -182,6 +182,7 @@ def run_multiplayer_settings_screen(screen, application_state):
     
     clock = pygame.time.Clock()
     screen.make_current(application_state["fullscreen"])
+
     player_name = ""
     is_typing = False
     
