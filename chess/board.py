@@ -4,7 +4,7 @@ from pieces import Bishop
 from pieces import Rook
 from pieces import Queen
 from pieces import King
-from constants import PAWN_ID, KNIGHT_ID, BISHOP_ID, ROOK_ID, QUEEN_ID
+from constants import PAWN_ID, KNIGHT_ID, BISHOP_ID, ROOK_ID, QUEEN_ID, KING_ID
 
 
 class Board:
@@ -429,3 +429,21 @@ class Board:
                     break
             else:
                 self.stalemate = True
+    
+
+    def is_end_game(self):
+        white_pieces = 0  # without pawns and king
+        black_pieces = 0  # without pawns and king
+
+        for row in self.board:
+            for piece in row:
+                if piece != None and piece.id != PAWN_ID and piece.id != KING_ID:
+                    if piece.color == "white":
+                        white_pieces += 1
+                    else:
+                        black_pieces += 1
+        
+        if white_pieces <= 3 and black_pieces <= 3:
+            return True
+        
+        return False

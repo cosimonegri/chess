@@ -28,6 +28,7 @@ def run_single_player(monitor_size, application_state, game_settings):
         "enemy_color": ("black" if player_color == "white" else "white"),
         "bot_lvl": bot_level,
         "bot_is_choosing": False,
+        "is_end_game": False,
         "remaining_draws": 1
     }
     
@@ -64,10 +65,13 @@ def run_single_player(monitor_size, application_state, game_settings):
         # BOT TURN
         if board.turn == game_state["enemy_color"] and not board.is_checkmate() and not board.is_stalemate():
             if not game_state["bot_is_choosing"]:
+                game_state["is_end_game"] = board.is_end_game()
                 fen_board = board.to_fen()
                 bot_move = []
                 bot_thread = threading.Thread(
-                    target=find_move, args=(fen_board, board.turn, game_state["bot_lvl"], bot_move)
+                    target=find_move, args=(
+                        fen_board, board.turn, game_state["bot_lvl"], game_state["is_end_game"], bot_move
+                    )
                 )
                 bot_thread.start()
                 game_state["bot_is_choosing"] = True

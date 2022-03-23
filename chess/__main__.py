@@ -5,14 +5,12 @@ if __name__ == '__main__':
 
 
 # TODAY
-# aggiungere tabelle end game per re e pedoni (+ logica di quando si entra in end game)
 # alla fine della partita tasto per vedere la partita e non per tornare indietro
-# appena premi f il consiglio sul fullscreen va via
-# testo in rosso usato anche per avvertire se server down
 
 
 # TOMORROW
 # testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no) con Damiano
+# destroy bot move in "board.py" ????
 
 
 # ai prova a fare scacco matto e non si muove a caso
@@ -22,6 +20,7 @@ if __name__ == '__main__':
 # aggiungere tempo nel multigiocatore ???
 
 
+# testo in rosso usato anche per avvertire se server down
 # funzione end turn in "board.py" ???
 # funzione grab piece and release ???
 # AI sottoforma di classe ???

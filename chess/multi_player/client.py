@@ -31,9 +31,13 @@ class Client:
         self.id = self.connect()  # player 1 or 2
     
     def connect(self):
+        self.client.settimeout(5)
         try:
             self.client.connect(self.addr)
             return int((self.client.recv(2048)).decode())
+        except socket.timeout:
+            print("Timeout expired")
+            return -1
         except:
             return -1
     

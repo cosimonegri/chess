@@ -15,12 +15,13 @@ except:
 class MenuScreen(Screen):
     FIRST_BUTTON_TOP_RATIO = 50
     SECOND_BUTTON_TOP_RATIO = 68
-    INFO_TEXT = "Press 'F ' to toggle fullscreen on and off"
+
+    FULLSCREEN_HINT = "Press 'F ' to toggle fullscreen on and off"
     INFO_VERTICAL_CENTER_RATIO = 92
 
     def __init__(self, title, monitor_size, first_top_ratio=FIRST_BUTTON_TOP_RATIO,
         second_top_ratio=SECOND_BUTTON_TOP_RATIO, info_vertical_center_ratio=INFO_VERTICAL_CENTER_RATIO,
-        text=INFO_TEXT, text_color=RED, font_name="Roboto", small_font_size=32, big_font_size=48
+        info_text=FULLSCREEN_HINT, text_color=RED, font_name="Roboto", small_font_size=32, big_font_size=48
     ):
         super().__init__(title, monitor_size)
         
@@ -28,7 +29,7 @@ class MenuScreen(Screen):
         self.multi_player_button = MenuButton("Multiplayer", second_top_ratio)
 
         self.info_vertical_center_ratio = info_vertical_center_ratio
-        self.text = text
+        self.info_text = info_text
         self.text_color = text_color
         self.font_name = font_name
         self.small_font_size = small_font_size
@@ -46,7 +47,7 @@ class MenuScreen(Screen):
         else:
             font_size = self.small_font_size
         self.font = pygame.font.SysFont(self.font_name, font_size, italic=True)
-        self.text_surface = self.font.render(self.text, 1, self.text_color)
+        self.text_surface = self.font.render(self.info_text, 1, self.text_color)
     
     
     def draw(self, mouse_pos):

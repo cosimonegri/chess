@@ -2,10 +2,11 @@ import chess
 from single_player.bot_data import PIECES_VALUES, POSITIONS_VALUES
          
 
-def find_move(fen_board, color, level, result):
+def find_move(fen_board: str, color: str, level: int, is_end_game: bool, result: list):
     global EVALUATED
     global USES_POSITIONS
     global MAX_DEPTH
+    global GAME_PHASE
     
     if level == 1:
         USES_POSITIONS = False
@@ -19,6 +20,11 @@ def find_move(fen_board, color, level, result):
     elif level == 4:
         USES_POSITIONS = True
         MAX_DEPTH = 4
+    
+    if is_end_game:
+        GAME_PHASE = "end"
+    else:
+        GAME_PHASE = "start"
     
     
     board = chess.Board(fen_board)
@@ -109,14 +115,14 @@ def evaluate(board, maximize):
     #     return 0
     # if board.is_insufficient_material():
     #     return 0
-    
+
     eval = 0
     for square in range(64):
         if board.piece_at(square) != None:
             piece = board.piece_at(square).symbol()
             eval += PIECES_VALUES[piece]
             if USES_POSITIONS:
-                eval += POSITIONS_VALUES["start"][piece][square]
+                eval += POSITIONS_VALUES[GAME_PHASE][piece][square]
     
     return eval
 
