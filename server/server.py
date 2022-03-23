@@ -67,7 +67,7 @@ def threaded_client(conn, address, game_index, current_player):
                 elif PLAYERS_CONNECTED[game_index][1] and PLAYERS_CONNECTED[game_index][2]:  # still 2 players in the game
                     conn.sendall(pickle.dumps(0))
                 else:
-                    conn.sendall(pickle.dumps(1))  # 1 player left
+                    conn.sendall(pickle.dumps(1))  # a player left
             
             else:  # user sends the new fen board
                 print(f"Player {current_player} in game {game_index+1} did a move")

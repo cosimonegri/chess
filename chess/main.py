@@ -43,7 +43,7 @@ def run():
         "running": True,
         "in_single_player": False,
         "in_multi_player": False,
-        "fullscreen": False,
+        "fullscreen": False
     }
     
     
@@ -183,8 +183,9 @@ def run_multiplayer_settings_screen(screen, application_state):
     clock = pygame.time.Clock()
     screen.make_current(application_state["fullscreen"])
 
-    player_name = ""
+    player_name = screen.text_input.text
     is_typing = False
+    screen.text_input.selected = False
     
     while screen.is_current():
         clock.tick(FPS)
@@ -205,7 +206,6 @@ def run_multiplayer_settings_screen(screen, application_state):
                     if event.key == pygame.K_f:
                         application_state["fullscreen"] = not application_state["fullscreen"]
                         screen.toggle_fullscreen()
-                        screen.update_content(player_name)
                 
                 else:
                     if event.key == pygame.K_BACKSPACE:
@@ -215,12 +215,14 @@ def run_multiplayer_settings_screen(screen, application_state):
                         if len(player_name) < MAX_NAME_LENGHT:
                             player_name += event.unicode
                     
-                    screen.update_content(player_name)
+                    screen.update_name(player_name)
+                    screen.update_content()
                     
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                 is_typing, start_game = screen.handle_click(mouse_pos, player_name)
-                screen.update_content(player_name)
+                screen.update_name(player_name)
+                screen.update_content()
                 
                 if start_game:
                     screen.end_current()

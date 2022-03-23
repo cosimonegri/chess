@@ -5,18 +5,20 @@ if __name__ == '__main__':
 
 
 # TODAY
+# aggiungere tabelle end game per re e pedoni (+ logica di quando si entra in end game)
+# alla fine della partita tasto per vedere la partita e non per tornare indietro
+# appena premi f il consiglio sul fullscreen va via
+# testo in rosso usato anche per avvertire se server down
 
 
 # TOMORROW
+# testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no) con Damiano
 
 
-# testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no)
-# aggiungere tabelle end game per re e pedoni (+ logica di quando si entra in end game)
 # ai prova a fare scacco matto e non si muove a caso
 # regole strane per i 50 turni eccetrea (anche nelle fen board)
 # estetica settings single player
 # ottimizzare conversione immagini pezzi (vedere se si può fare solo al cambio fullscreen)
-# vedere se possono non passare la board ai metodi draw tutte le volte in "game_screen.py"
 # aggiungere tempo nel multigiocatore ???
 
 

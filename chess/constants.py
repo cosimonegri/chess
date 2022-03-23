@@ -17,7 +17,7 @@ SELECT_COLOR = (249,188,56)
 RED = (255,30,30)
 
 
-LOADING_POINTS_NUM = 4  # max number of dynamic points in the loading screen animation
+LOADING_POINTS_NUM = 4  # max number of dynamic points in the "waiting for an opponent" animation
 MAX_NAME_LENGHT = 10
 FPS = 80
 TIMER = 0.5  # time between requests to the server

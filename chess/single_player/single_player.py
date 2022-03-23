@@ -153,7 +153,7 @@ def run_single_player(monitor_size, application_state, game_settings):
         
         # DRAW SCREEN AND POPUPS
         if game_state["remaining_draws"] or board.selected_piece != None:
-            game_screen.draw(board)
+            game_screen.draw()
             if game_state["remaining_draws"] > 0:
                 game_state["remaining_draws"] -= 1
         if promotion_popup.is_active():

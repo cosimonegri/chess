@@ -20,12 +20,14 @@ class MultiplayerSettingsScreen(Screen):
         self.text_input = TextInput()
         self.start_button = MultiPlayerButton("Start Game")
     
-    
-    def update_content(self, text=""):
+
+    def update_name(self, text=""):
         self.text_input.text = text
+
+    
+    def update_content(self):
         self.text_input.update_position(self.win_size)
         self.text_input.update_font_size(self.fullscreen)
-        
         self.start_button.update_position(self.win_size)
         self.start_button.update_font_size(self.fullscreen)
     
@@ -62,7 +64,7 @@ class TextInput():
     def __init__(self, left_ratio=None, top_ratio=TEXT_INPUT_TOP_RATIO, w_ratio=TEXT_INPUT_W_RATIO,
         h_ratio=TEXT_INPUT_H_RATIO, color=GREY, hover_color=SELECT_COLOR, text_color1=BLACK, text_color2=DARK_GREY,
         font_name="Roboto", big_font_size=50, small_font_size=34
-    ):  
+    ):
         self.text = ""
         self.alt_text = "Type your name here"
         self.selected = False

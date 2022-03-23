@@ -25,22 +25,22 @@ class GameScreen(Screen):
 
         self.pieces_images = {"white": [], "black": []}
         try:
-            for key, value in ALT_PIECES_PATHS.items():
+            for key, value in ALT_PIECES_PATHS.items():  # key = piece color, value = list of images paths for that color
                 self.pieces_images[key] = list(map(lambda path: pygame.image.load(path), value))
         except:
             for key, value in PIECES_PATHS.items():
                 self.pieces_images[key] = list(map(lambda path: pygame.image.load(path), value))
     
     
-    def draw(self, board):
+    def draw(self):
         self.draw_tiles()
-        self.draw_pieces(board.board)
+        self.draw_pieces()
         
-        if board.selected_piece != None:
-            self.draw_valid_moves(board.board, board.selected_piece)
-            self.draw_moving_piece(board.selected_piece)
+        if self.board.selected_piece != None:
+            self.draw_valid_moves()
+            self.draw_moving_piece()
         
-        self.draw_eaten_pieces(board.eaten_pieces)
+        self.draw_eaten_pieces()
         self.draw_players_info()
     
     
@@ -84,9 +84,10 @@ class GameScreen(Screen):
                         (win_width - win_height) // 2, row*tile_size, tile_size, tile_size))
     
     
-    def draw_pieces(self, board):
+    def draw_pieces(self):
         screen = self.screen
         win_width, win_height = self.win_size
+        board = self.board.board
         tile_size = self.tile_size
         
         for row in range(8):
@@ -108,9 +109,12 @@ class GameScreen(Screen):
                     )
     
     
-    def draw_valid_moves(self, board, selected_piece):
+    def draw_valid_moves(self):
         screen = self.screen
         win_width, win_height = self.win_size
+
+        board = self.board.board
+        selected_piece = self.board.selected_piece
         
         tile_size = self.tile_size
         small_circle_radius = int((tile_size * SMALL_CIRCLE_RADIUS_RATIO) // 100)
@@ -137,10 +141,12 @@ class GameScreen(Screen):
                 )
     
     
-    def draw_moving_piece(self, selected_piece):
+    def draw_moving_piece(self):
         x, y = pygame.mouse.get_pos()
         screen = self.screen
         win_width, win_height = self.win_size
+
+        selected_piece = self.board.selected_piece
         tile_size = self.tile_size
         piece_row, piece_col = selected_piece.row, selected_piece.col
         
@@ -179,10 +185,11 @@ class GameScreen(Screen):
         self.screen.blit(self.enemy_name_surface, enemy_name_rect)
     
     
-    def draw_eaten_pieces(self, eaten_pieces):
+    def draw_eaten_pieces(self):
         win_width, win_height = self.win_size
         screen = self.screen
         piece_size = self.tile_size // 10 * 7
+        eaten_pieces = self.board.eaten_pieces
         my_color, enemy_color = self.game_state["my_color"], self.game_state["enemy_color"]
         
         you_start_x = (win_width - win_height) // 4 - piece_size
