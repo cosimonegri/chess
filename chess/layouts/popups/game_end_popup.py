@@ -23,7 +23,7 @@ class GameEndPopup(Popup):
         self.small_font_size = small_font_size
         self.text_color = text_color
         
-        self.back_menu_button = GameEndButton("MENU")
+        self.back_menu_button = GameEndButton("SEE GAME")
     
     
     def update(self, win_size, fullscreen, player_color, winner):

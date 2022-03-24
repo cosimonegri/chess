@@ -5,7 +5,6 @@ if __name__ == '__main__':
 
 
 # TODAY
-# alla fine della partita tasto per vedere la partita e non per tornare indietro
 
 
 # TOMORROW

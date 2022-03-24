@@ -2,7 +2,7 @@ import chess
 from single_player.bot_data import PIECES_VALUES, POSITIONS_VALUES
          
 
-def find_move(fen_board: str, color: str, level: int, is_end_game: bool, result: list):
+def find_move(fen_board: str, color: str, level: int, is_end_game_phase: bool, result: list):
     global EVALUATED
     global USES_POSITIONS
     global MAX_DEPTH
@@ -21,7 +21,7 @@ def find_move(fen_board: str, color: str, level: int, is_end_game: bool, result:
         USES_POSITIONS = True
         MAX_DEPTH = 4
     
-    if is_end_game:
+    if is_end_game_phase:
         GAME_PHASE = "end"
     else:
         GAME_PHASE = "start"

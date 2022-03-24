@@ -21,15 +21,15 @@ def run_single_player(monitor_size, application_state, game_settings):
     bot_level = game_settings[1]
     
     game_state = {
-        "mode": "single player",
         "my_name": "You",
         "my_color": player_color,
         "enemy_name": "Bot lvl " + str(bot_level),
         "enemy_color": ("black" if player_color == "white" else "white"),
         "bot_lvl": bot_level,
         "bot_is_choosing": False,
-        "is_end_game": False,
-        "remaining_draws": 1
+        "is_end_game_phase": False,
+        "remaining_draws": 1,
+        "has_shown_end_popup": False,
     }
     
     clock = pygame.time.Clock()
@@ -55,7 +55,8 @@ def run_single_player(monitor_size, application_state, game_settings):
         else:
             promotion_popup.hide()
         
-        if board.is_checkmate() or board.is_stalemate() and not game_end_popup.is_active():
+        if (board.is_checkmate() or board.is_stalemate()) and not game_state["has_shown_end_popup"]:
+            game_state["has_shown_end_popup"] = True
             game_end_popup.update(
                 game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
             )
@@ -65,12 +66,12 @@ def run_single_player(monitor_size, application_state, game_settings):
         # BOT TURN
         if board.turn == game_state["enemy_color"] and not board.is_checkmate() and not board.is_stalemate():
             if not game_state["bot_is_choosing"]:
-                game_state["is_end_game"] = board.is_end_game()
+                game_state["is_end_game_phase"] = board.is_end_game_phase()
                 fen_board = board.to_fen()
                 bot_move = []
                 bot_thread = threading.Thread(
                     target=find_move, args=(
-                        fen_board, board.turn, game_state["bot_lvl"], game_state["is_end_game"], bot_move
+                        fen_board, board.turn, game_state["bot_lvl"], game_state["is_end_game_phase"], bot_move
                     )
                 )
                 bot_thread.start()
@@ -136,10 +137,9 @@ def run_single_player(monitor_size, application_state, game_settings):
                     handle_promotion_button_down(board, promotion_popup, game_state)
                         
                 elif game_end_popup.is_active():
-                    back_to_menu = game_end_popup.handle_click(mouse_pos)
-                    if back_to_menu:
-                        game_screen.end_current()
-                        return
+                    see_game = game_end_popup.handle_click(mouse_pos)
+                    if see_game:
+                        game_end_popup.hide()
                     
                 else:
                     if board.turn == game_state["my_color"]:
@@ -160,6 +160,7 @@ def run_single_player(monitor_size, application_state, game_settings):
             game_screen.draw()
             if game_state["remaining_draws"] > 0:
                 game_state["remaining_draws"] -= 1
+        
         if promotion_popup.is_active():
             promotion_popup.draw(game_screen.screen, game_screen.win_size, mouse_pos)
         if game_end_popup.is_active():

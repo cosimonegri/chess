@@ -431,7 +431,7 @@ class Board:
                 self.stalemate = True
     
 
-    def is_end_game(self):
+    def is_end_game_phase(self):
         white_pieces = 0  # without pawns and king
         black_pieces = 0  # without pawns and king
 
@@ -444,6 +444,9 @@ class Board:
                         black_pieces += 1
         
         if white_pieces <= 3 and black_pieces <= 3:
+            return True
+        
+        elif white_pieces <= 2 or black_pieces <= 2:
             return True
         
         return False

@@ -19,12 +19,12 @@ def run_multi_player(monitor_size, application_state, player_name):
         move_sound = pygame.mixer.Sound("./chess/assets/Sounds/move.wav")
     
     game_state = {
-        "mode": "multi player",
         "my_name": player_name,
         "my_color": None,
         "enemy_name": None,
         "enemy_color": None,
-        "remaining_draws": 1
+        "remaining_draws": 1,
+        "has_shown_end_popup": False,
     }
     
     connection_state = {
@@ -33,7 +33,7 @@ def run_multi_player(monitor_size, application_state, player_name):
         "failed_connection": False,
         "new_data": None,
         "disconnecting": False,
-        "opponent_disconnected": False
+        "opponent_disconnected": False,
     }
     
     clock = pygame.time.Clock()
@@ -143,12 +143,13 @@ def run_multi_player(monitor_size, application_state, player_name):
         else:
             promotion_popup.hide()
         
-        if board.is_checkmate() or board.is_stalemate() or connection_state["opponent_disconnected"]:
-            if not game_end_popup.is_active():
-                game_end_popup.update(
-                    game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
-                )
-                game_end_popup.show()
+        if (board.is_checkmate() or board.is_stalemate() or connection_state["opponent_disconnected"]) and not game_state["has_shown_end_popup"]:
+            game_state["has_shown_end_popup"] = True
+            game_end_popup.update(
+                game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
+            )
+            game_end_popup.show()
+            connection_state["disconnecting"] = True
         
         
         # GET EVENTS
@@ -197,13 +198,9 @@ def run_multi_player(monitor_size, application_state, player_name):
                     handle_promotion_button_down(board, promotion_popup, game_state, connection_state["client"])
                         
                 elif game_end_popup.is_active():
-                    back_to_menu = game_end_popup.handle_click(mouse_pos)
-                    if back_to_menu:
-                        game_screen.end_current()
-                        connection_state["disconnecting"] = True
-                        print("kill client thread")
-                        connection_state["client"].send("quit")
-                        return
+                    see_game = game_end_popup.handle_click(mouse_pos)
+                    if see_game:
+                        game_end_popup.hide()
                     
                 else:
                     if board.turn == game_state["my_color"]:
