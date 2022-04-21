@@ -5,20 +5,23 @@ if __name__ == '__main__':
 
 
 # TODAY
+# destroy bot move in "board.py" ????
+# vedere scaricamento automatico pygame da tech with tim
+# mettere timeout nel server nel caso in cui qualcuno si disconnetta
+# creare file server_ip.txt se non esiste, o comunque avvertire con un errore
+# stringone alfanumerico per accettare o no utente (sicurezza server anti spam)
 
 
 # TOMORROW
 # testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no) con Damiano
-# destroy bot move in "board.py" ????
 
 
 # ai prova a fare scacco matto e non si muove a caso
 # regole strane per i 50 turni eccetrea (anche nelle fen board)
+# regole per tre mosse di fila
 # estetica settings single player
-# ottimizzare conversione immagini pezzi (vedere se si può fare solo al cambio fullscreen)
+
 # aggiungere tempo nel multigiocatore ???
-
-
 # testo in rosso usato anche per avvertire se server down
 # funzione end turn in "board.py" ???
 # funzione grab piece and release ???

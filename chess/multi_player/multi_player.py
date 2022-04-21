@@ -11,7 +11,7 @@ from constants import FPS, DRAWS_AFTER_MINIMIZE, LOADING_POINTS_NUM
 
 
 def run_multi_player(monitor_size, application_state, player_name):
-    print("[GAME] multiplayer game started")
+    print("[GAME] Multiplayer game started")
 
     try:
         move_sound = pygame.mixer.Sound("./assets/Sounds/move.wav")
@@ -28,21 +28,20 @@ def run_multi_player(monitor_size, application_state, player_name):
     }
     
     connection_state = {
-        "client": None,
-        "client_thread": None,
-        "failed_connection": False,
-        "new_data": None,
-        "disconnecting": False,
-        "opponent_disconnected": False,
+        "client": None,  # client socket to interact and exchange messages with the server
+        "client_thread": None,  # client thread to handle the connection in the background
+        "failed_connection": False,  # used during the connection setup phase
+        "new_data": None,  # contains the data (new board and eaten pieces) received from the opponent
+        "disconnected": False,  # used during the game phase
+        "opponent_disconnected": False,  # used during the game phase
     }
     
     clock = pygame.time.Clock()
     board = Board()
-    board.update_legal_moves()  # not pseudo even if at the beginning check is impossible, just to be sure
+    board.update_legal_moves()  # not just pseudo moves even if at the beginning check is impossible, just to be sure
     
     connection_thread = ConnectionThread(connection_state, game_state, board)
     connection_thread.start()
-    print("start connection thread")
     
     loading_screen = LoadingScreen("Chess - loading", monitor_size)
     game_screen = GameScreen("Chess - multiplayer", monitor_size, board, game_state)
@@ -50,7 +49,7 @@ def run_multi_player(monitor_size, application_state, player_name):
     game_end_popup = GameEndPopup()
     loading_screen.make_current(application_state["fullscreen"])
 
-    points_num = None  ## number of dots in the loading screen animation
+    points_num = None  # number of dots in the loading screen animation
     
 
     # LOADING SCREEN AND SETUP
@@ -66,9 +65,9 @@ def run_multi_player(monitor_size, application_state, player_name):
         
 
         if connection_state["failed_connection"]:
-            print("Connection failed")
             loading_screen.end_current()
             return
+
         elif game_state["enemy_name"] != None:  # an opponent has been found
             loading_screen.end_current()
             game_screen.make_current(application_state["fullscreen"])
@@ -79,16 +78,12 @@ def run_multi_player(monitor_size, application_state, player_name):
             if event.type == pygame.QUIT:
                 connection_state["failed_connection"] = True
                 loading_screen.end_current()
-                connection_thread.raise_exception()
-                print("kill connection thread")
                 return
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     connection_state["failed_connection"] = True
                     loading_screen.end_current()
-                    connection_thread.raise_exception()
-                    print("kill connection thread")
                     return
                 
                 if event.key == pygame.K_f:
@@ -118,7 +113,7 @@ def run_multi_player(monitor_size, application_state, player_name):
             board.eaten_pieces = new_eaten_pieces
             move_sound.play()
             
-            # check if i have has lost
+            # check if i have lost
             board.update_legal_moves(board.turn)
             board.check_if_loser(board.turn)
             
@@ -149,24 +144,24 @@ def run_multi_player(monitor_size, application_state, player_name):
                 game_screen.win_size, application_state["fullscreen"], game_state["my_color"], board.winner
             )
             game_end_popup.show()
-            connection_state["disconnecting"] = True
+
+            if not connection_state["disconnected"]:
+                connection_state["client"].disconnect(connection_state)
         
         
         # GET EVENTS
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_screen.end_current()
-                connection_state["disconnecting"] = True
-                print("kill client thread")
-                connection_state["client"].send("quit")
+                if not connection_state["disconnected"]:
+                    connection_state["client"].disconnect(connection_state)
                 return
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     game_screen.end_current()
-                    connection_state["disconnecting"] = True
-                    print("kill client thread")
-                    connection_state["client"].send("quit")
+                    if not connection_state["disconnected"]:
+                        connection_state["client"].disconnect(connection_state)
                     return
                 
                 # TOGGLE FULLSCREEN ON AND OFF
@@ -267,10 +262,7 @@ def handle_game_click_up(board, game_screen, client, move_sound):
                     board.check_if_loser(board.turn)
                     
                     # sending data to the server
-                    response = client.send((board.to_fen(), board.eaten_pieces))
-                    while response != "received":
-                        print("Trying again to send the new board to the server")
-                        response = client.send((board.to_fen(), board.eaten_pieces))
+                    client.send((board.to_fen(), board.eaten_pieces))
         
     board.selected_piece = None
 
@@ -287,7 +279,4 @@ def handle_promotion_button_down(board, promotion_popup, game_state, client):
         board.check_if_loser(board.turn)
         
         # sending data to the server
-        response = client.send((board.to_fen(), board.eaten_pieces))
-        while response != "received":
-            print("Trying again to send the new board to the server")
-            response = client.send((board.to_fen(), board.eaten_pieces))
+        client.send((board.to_fen(), board.eaten_pieces))

@@ -21,7 +21,7 @@ LOADING_POINTS_NUM = 4  # max number of dynamic points in the "waiting for an op
 MAX_NAME_LENGHT = 10
 FPS = 80
 TIMER = 0.5  # time between requests to the server
-DRAWS_AFTER_MINIMIZE = 3  # number of times to draw after the user exits fullscreen mode (to fix Linux black screen)
+DRAWS_AFTER_MINIMIZE = 3  # number of times to draw after the user exits fullscreen mode (more than one to fix Linux black screen)
 
 
 #pieces ids

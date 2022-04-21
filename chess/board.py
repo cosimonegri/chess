@@ -137,9 +137,6 @@ class Board:
         #############  ADD RULES for fifty rule move and moves count
         fen_board += '0 0'
         return fen_board
-
-
-        # aggiornare nella tabella fen il castling del bot se
     
     
     def square_to_uci(self, row, col):
@@ -232,7 +229,10 @@ class Board:
     
     
     def update_legal_moves(self, color=None):
-        '''Update the legal moves of the pieces with the specified color. Call at the beginning of a player's turn.'''
+        """
+        Update all teh pseudo legal moves and the legal moves of the pieces with the specified color.
+        Call this function at the beginning of a player's turn, with his color.
+        """
         
         if color == None:
             color = self.turn
