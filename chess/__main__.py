@@ -11,6 +11,9 @@ if __name__ == '__main__':
 # creare file server_ip.txt se non esiste, o comunque avvertire con un errore
 # stringone alfanumerico per accettare o no utente (sicurezza server anti spam)
 
+# dopo fine partita, non ci si può più muovere e si può solo uscire
+# testare che la generazione delle mosse funzioni correttamente
+
 
 # TOMORROW
 # testare se da vittoria quando giocatore si disconnette per mancata connessione (probabilmente no) con Damiano

@@ -1,26 +1,15 @@
 import socket
 import threading
 import pickle
-import re
 from time import sleep
+from dotenv import load_dotenv
+import os
 
 from constants import TIMER
 
-
-with open("server_ip.txt", "r") as f:
-    line1 = f.readline()
-    line2 = f.readline()
-    line3 = f.readline()
-
-if re.search(r'true', line1) != None:
-    host_pattern = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
-    port_pattern = re.compile(r'(\d{1,5})')
-    HOST = re.search(host_pattern, line2)[0]
-    PORT = int(re.search(port_pattern, line3)[0])
-else:
-    HOST = "34.65.155.95"
-    PORT = 5578 #3389
-
+load_dotenv()
+HOST = os.getenv('IP')
+PORT = int(os.getenv('PORT'))
 
 class Client:
     def __init__(self):
