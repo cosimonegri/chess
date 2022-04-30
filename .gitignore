@@ -1,3 +1,7 @@
 venv/
-versions/
+
 *.pyc
+*__pycache__
+
+chess/test.py
+chess/test2.py

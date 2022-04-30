@@ -108,7 +108,7 @@ def run_multi_player(monitor_size, application_state, player_name):
         if connection_state["new_data"]:
             new_fen_board, new_eaten_pieces = connection_state["new_data"]
 
-            board.set_fen(new_fen_board)  # this also updates the turn
+            board.from_fen(new_fen_board)  # this also updates the turn
             board.eaten_pieces = new_eaten_pieces
             move_sound.play()
             

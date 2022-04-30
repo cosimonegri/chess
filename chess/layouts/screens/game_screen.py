@@ -1,6 +1,7 @@
 import pygame
 from layouts.screen import Screen
-from constants import BLACK, GREY, DARK_BROWN, LIGHT_BROWN, SELECT_COLOR, PIECES_PATHS, ALT_PIECES_PATHS
+from constants import BLACK, GREY, DARK_BROWN, LIGHT_BROWN, SELECT_COLOR
+from pieces.constants import PIECES_PATHS, ALT_PIECES_PATHS
 
 # ratios relative to the tile size
 # small circle in the tile where you can move, big circle in the tiles where you can move and capture a piece

@@ -1,7 +1,9 @@
 import pygame
 from layouts.popup import Popup
 from layouts.button import Button
-from constants import GREY, BLACK, SELECT_COLOR, PIECES_PATHS, ALT_PIECES_PATHS, QUEEN_ID, ROOK_ID, BISHOP_ID, KNIGHT_ID
+from constants import GREY, BLACK, SELECT_COLOR
+from pieces.constants import PIECES_PATHS, ALT_PIECES_PATHS
+from pieces import Piece
 
 
 class PromotionPopup(Popup):
@@ -24,29 +26,29 @@ class PromotionPopup(Popup):
     def get_buttons_images(self):
         try:
             self.white_buttons = [
-                PromotionButton(pygame.image.load(PIECES_PATHS["white"][QUEEN_ID]), 0, 0),
-                PromotionButton(pygame.image.load(PIECES_PATHS["white"][ROOK_ID]), 50, 0),
-                PromotionButton(pygame.image.load(PIECES_PATHS["white"][BISHOP_ID]), 0, 50),
-                PromotionButton(pygame.image.load(PIECES_PATHS["white"][KNIGHT_ID]), 50, 50),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][Piece.QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][Piece.ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][Piece.BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(PIECES_PATHS["white"][Piece.KNIGHT_ID]), 50, 50),
             ]
             self.black_buttons = [
-                PromotionButton(pygame.image.load(PIECES_PATHS["black"][QUEEN_ID]), 0, 0),
-                PromotionButton(pygame.image.load(PIECES_PATHS["black"][ROOK_ID]), 50, 0),
-                PromotionButton(pygame.image.load(PIECES_PATHS["black"][BISHOP_ID]), 0, 50),
-                PromotionButton(pygame.image.load(PIECES_PATHS["black"][KNIGHT_ID]), 50, 50),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][Piece.QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][Piece.ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][Piece.BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(PIECES_PATHS["black"][Piece.KNIGHT_ID]), 50, 50),
             ]
         except:
             self.white_buttons = [
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][QUEEN_ID]), 0, 0),
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][ROOK_ID]), 50, 0),
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][BISHOP_ID]), 0, 50),
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][KNIGHT_ID]), 50, 50),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][Piece.QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][Piece.ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][Piece.BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["white"][Piece.KNIGHT_ID]), 50, 50),
             ]
             self.black_buttons = [
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][QUEEN_ID]), 0, 0),
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][ROOK_ID]), 50, 0),
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][BISHOP_ID]), 0, 50),
-                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][KNIGHT_ID]), 50, 50),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][Piece.QUEEN_ID]), 0, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][Piece.ROOK_ID]), 50, 0),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][Piece.BISHOP_ID]), 0, 50),
+                PromotionButton(pygame.image.load(ALT_PIECES_PATHS["black"][Piece.KNIGHT_ID]), 50, 50),
             ]
     
     

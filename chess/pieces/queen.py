@@ -1,14 +1,38 @@
 from pieces.piece import Piece
-from constants import QUEEN_ID
 
 
 class Queen(Piece):
+    """Class that inherits from the Piece class, and that handles things related to the queen piece.
+    
+    :attr id: int
+    :attr row: int
+    :attr col: int
+    :attr color: str
+    :attr image: pygame.Surface
+    """
+
     def __init__(self, row, col, color):
-        self.id = QUEEN_ID
+        """
+        :param row: int
+        :param col: int
+        :param color: str
+        """
+        self.id = Piece.QUEEN_ID
         super().__init__(row, col, color)
     
     
-    def calculate_valid_moves(self, board, castle_rights, en_passant):
+    def calculate_valid_moves(self, board, castle_rights, en_passant_square):
+        """Calculates the squares where the piece can move.
+        
+        This function takes into account all the chess rules, except from check.
+        Therefore, also moves that are not valid because you are in check, or because
+        they would put you in check, are considere valid here.
+
+        :param board: list[list[ optional[Piece] ]]
+        :param castle_rights: str
+        :param en_passant_square: tuple[int, int]
+        :return: tuple[ list[list[bool]], list[tuple[int, int]] ]
+        """
         valid_moves_table = [[False for _ in range(8)] for _ in range(8)]
         valid_moves_list = []
         
