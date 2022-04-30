@@ -1,1 +1,0 @@
-contiene un .md file per ogni package all'interno di chess

@@ -3,7 +3,6 @@ import threading
 import pickle
 import re
 from time import sleep
-#import ctypes
 
 from constants import TIMER
 

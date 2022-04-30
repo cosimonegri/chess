@@ -6,7 +6,6 @@ from board import Board
 from layouts import LoadingScreen, GameScreen, PromotionPopup, GameEndPopup
 
 from multi_player.client import ConnectionThread
-from helpers import display_fps
 from constants import FPS, DRAWS_AFTER_MINIMIZE, LOADING_POINTS_NUM
 
 
@@ -222,7 +221,6 @@ def run_multi_player(monitor_size, application_state, player_name):
             game_end_popup.draw(game_screen.screen, mouse_pos)
         
         
-        #display_fps(game_screen.screen, clock)
         game_screen.handle_mouse_icon(mouse_pos, board)
         pygame.display.flip()
 
