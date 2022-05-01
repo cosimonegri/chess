@@ -36,7 +36,7 @@ class Board:
     
 
     def __init__(self, fen=STARTING_FEN):
-        """Create the board and other game data using the Forsyth-Edwards Notation (FEN).
+        """Initialize the board using the Forsyth-Edwards Notation (FEN) and other game data.
         
         :param fen: str
         """
